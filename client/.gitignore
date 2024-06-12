@@ -1,5 +1,5 @@
 API/node_modules
-node_modules
+client/node_modules
 API/.env
 
 # Logs
