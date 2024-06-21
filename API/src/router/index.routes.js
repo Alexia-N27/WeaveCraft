@@ -14,7 +14,7 @@ const BASE_API = "/api/v1";
 
 router.use(`${BASE_API}/auth`, auth_router);
 router.use(`${BASE_API}/role`, role_router);
-router.use(`${BASE_API}/address`, address_router);
+router.use(`${BASE_API}/addresses`, address_router);
 
 
 export default router;

@@ -1,13 +1,8 @@
 import Addresses from "../models/Addresses.js";
+import Query from "../models/Query.js";
 
-
-
-// import Query from "../models/Query.js";
-
-const getAllAddress = async (req, res) => {
+const getAllAddresses = async (req, res) => {
   try {
-    // const query = `SELECT * FROM addresses`;
-    // const response = await Query.run(query);
     const response = await Addresses.getAllAddresses();
     res.json({
       msg: "Je suis sur la route API pour récupérer toutes les adresses",
@@ -19,14 +14,10 @@ const getAllAddress = async (req, res) => {
 };
 
 // Ajout d'une adresse
-const addAddress = async (req, res) => {
+const addAddresses = async (req, res) => {
   console.log("ADD ADDRESS", req.body);
   try {
-    const query = `
-    INSERT INTO addresses (street, city, zip_code, country, address_type, complement, user_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-    const response = await Query.runWithParams(query, req.body);
+    const response = await Addresses.postAddAddresses(req.body);
     res.json({ msg: "Les données ont bien été insérées", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur de serveur", error });
@@ -34,14 +25,10 @@ const addAddress = async (req, res) => {
 };
 
 // Modification d'adresse
-const editAddress = async (req, res) => {
+const editAddresses = async (req, res) => {
   try {
-    const { id } = req.params;
-    const query = `
-    UPDATE addresses SET street = ?, city = ?, zip_code = ?, country = ?, address_type = ?, complement = ?, user_id = ? WHERE id = ? `;
-    const data = {...req.body, id};
-    const response = await Query.runWithParams(query, data);
 
+    const response = await Addresses.patchEditAddresses(req.params.id, req.body);
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Adresse non trouvé" });
     }
@@ -52,12 +39,9 @@ const editAddress = async (req, res) => {
 };
 
 // Suppression d'adresse
-const deleteAddress = async (req, res) => {
+const deleteAddresses = async (req, res) => {
   try {
-    const { id } = req.params;
-    const query = `DELETE FROM addresses WHERE id = ?`;
-    const response = await Query.runWithParams(query, id);
-
+    const response = await Addresses.deleteAddressesById(req.params.id);
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Adresse non trouvée" });
     }
@@ -68,4 +52,4 @@ const deleteAddress = async (req, res) => {
 };
 
 
-export { getAllAddress, addAddress, editAddress, deleteAddress };
+export { getAllAddresses, addAddresses, editAddresses, deleteAddresses };
