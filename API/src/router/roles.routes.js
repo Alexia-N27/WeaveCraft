@@ -1,6 +1,6 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
-import { getAll, addRole, editRole, deleteRole } from "../controllers/role.js";
+import { getAll, addRole, editRole, deleteRole } from "../controllers/roles.controller.js";
 
 const router = Router();
 

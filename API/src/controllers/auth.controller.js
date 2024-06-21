@@ -1,16 +1,5 @@
-import Query from "../model/Query.js";
+import Query from "../models/Query.js";
 import bcrypt from "bcrypt";
-
-// Vérifier si une session est ouverte
-const checkAuth = (req, res) => {
-  if(req.session.user) {
-    console.log("session user")
-    res.json({ message: "Utilisateur connecté", user: req.session.user });
-  } else {
-    console.log("Aucune session user");
-    res.status(401).json({ message: "Utilisateur non connecté" });
-  }
-};
 
 // Inscription des utilisateurs
 const registerUser = async (req, res) => {
@@ -59,7 +48,7 @@ const loginUser = async (req, res) => {
 
     const infoUser = {
       firstname: user.firstname,
-      role_id: user.role_id,
+      roles_id: user.roles_id,
     };
 
     req.session.user = infoUser;
@@ -143,8 +132,8 @@ const deleteUser = async (req, res) => {
   try{
     const { id } = req.params;
 
-    const queryAddress = `DELETE FROM addresses WHERE user_id = ?`;
-    await Query.runWithParams(queryAddress, [parseInt(id, 10)]);
+    // const queryAddress = `DELETE FROM addresses WHERE user_id = ?`;
+    // await Query.runWithParams(queryAddress, [parseInt(id, 10)]);
 
     const queryUser = `DELETE FROM users WHERE id = ?`;
     const response = await Query.runWithParams(queryUser, [parseInt(id, 10)]);
@@ -159,4 +148,4 @@ const deleteUser = async (req, res) => {
 };
 
 
-export { checkAuth, getAllUser, getUserById, registerUser, loginUser, logoutUser, editUser, deleteUser };
+export { getAllUser, getUserById, registerUser, loginUser, logoutUser, editUser, deleteUser };

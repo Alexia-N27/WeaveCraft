@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth_router from "./auth.routes.js";
-import role_router from "./role.routes.js";
-import address_router from "./address.routes.js";
+import role_router from "./roles.routes.js";
+import address_router from "./addresses.routes.js";
 
 const router = Router();
 const BASE_API = "/api/v1";

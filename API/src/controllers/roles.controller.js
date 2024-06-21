@@ -1,4 +1,4 @@
-import Query from "../model/Query.js";
+import Query from "../models/Query.js";
 
 // Affichage de tout les rôles
 const getAll = async (req, res) => {
@@ -13,11 +13,11 @@ const getAll = async (req, res) => {
 
 // Ajout d'un rôle
 const addRole = async (req, res) => {
-  const { role_label } = req.body;
+  const { label } = req.body;
 
   try {
-    const query = `INSERT INTO roles (role_label) VALUES (?)`;
-    const response = await Query.runWithParams(query, [role_label]);
+    const query = `INSERT INTO roles (label) VALUES (?)`;
+    const response = await Query.runWithParams(query, [label]);
 
     res.json({ msg: "Les données ont bien été inséré", response });
   } catch (error) {
@@ -29,7 +29,7 @@ const addRole = async (req, res) => {
 const editRole = async (req, res) => {
   try {
     const { id } = req.params;
-    const query = `UPDATE roles SET role_label = ? WHERE id = ?`;
+    const query = `UPDATE roles SET label = ? WHERE id = ?`;
     const data = {...req.body, id};
     const response = await Query.runWithParams(query, data);
 
