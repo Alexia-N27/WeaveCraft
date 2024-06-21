@@ -1,11 +1,11 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
-import { getAllAddress, addAddress, editAddress, deleteAddress } from "../controllers/address.js";
+import { getAllAddress, addAddress, editAddress, deleteAddress } from "../controllers/addresses.controller.js";
 
 const router = Router();
 
 // Affichage de toute les adresses utilisateurs
-router.get("/", adminRequired, getAllAddress);
+router.get("/", getAllAddress);
 
 // Affichage d'une adresse ?
 

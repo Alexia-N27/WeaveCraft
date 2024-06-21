@@ -1,9 +1,14 @@
-import Query from "../model/Query.js";
+import Addresses from "../models/Addresses.js";
+
+
+
+// import Query from "../models/Query.js";
 
 const getAllAddress = async (req, res) => {
   try {
-    const query = `SELECT * FROM addresses`;
-    const [response] = await Query.run(query);
+    // const query = `SELECT * FROM addresses`;
+    // const response = await Query.run(query);
+    const response = await Addresses.getAllAddresses();
     res.json({
       msg: "Je suis sur la route API pour récupérer toutes les adresses",
       response
