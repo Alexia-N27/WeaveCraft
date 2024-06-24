@@ -33,7 +33,6 @@ class Addresses {
     UPDATE addresses SET address_type = ?, street = ?, complement = ?, city = ?, zip_code = ?, country = ?, users_id = ?
     WHERE id = ?
     `;
-    const params = Object.values(data);
     const response = await Query.runWithParams(query, data);
     return response;
   }
