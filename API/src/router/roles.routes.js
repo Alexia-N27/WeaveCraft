@@ -1,19 +1,22 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
-import { getAll, addRole, editRole, deleteRole } from "../controllers/roles.controller.js";
+import { AllRoles, rolesById, addRoles, editRoles, deleteRoles } from "../controllers/roles.controller.js";
 
 const router = Router();
 
 // Affichage de tout les rôles
-router.get("/", adminRequired, getAll);
+router.get("/", adminRequired, AllRoles);
+
+// Affichage d'un rôle
+router.get("/:id", adminRequired, rolesById);
 
 // Ajout d'un rôle
-router.post("/", adminRequired, addRole);
+router.post("/", adminRequired, addRoles);
 
 // Modification d'un rôle
-router.patch("/:id", adminRequired, editRole);
+router.patch("/:id", adminRequired, editRoles);
 
 // suppression d'un rôle
-router.delete("/:id", adminRequired, deleteRole);
+router.delete("/:id", adminRequired, deleteRoles);
 
 export default router;

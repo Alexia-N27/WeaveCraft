@@ -1,38 +1,46 @@
-import Query from "../models/Query.js";
+import Roles from "../models/Roles.js";
 
 // Affichage de tout les rôles
-const getAll = async (req, res) => {
+const AllRoles = async (req, res) => {
   try {
-    const query = `SELECT * FROM roles`;
-    const response = await Query.run(query);
-    res.json({ msg: "Je suis sur la route API pour récupérer tout les rôles", response });
+    const response = await Roles.getAllRoles();
+    res.json({
+      msg: "Tout les rôles ont été récupérés avec succès.",
+      response
+    });
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur de serveur", error });
+  }
+};
+
+// Affichage d'un rôle
+const rolesById = async (req, res) => {
+  try {
+    const response = await Roles.getRolesById(req.params.id);
+    if (!response) {
+      return res.status(404).json({ msg: "Role non trouvée" });
+    }
+    res.json({ msg: "Role récupéré avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur de serveur", error });
   }
 };
 
 // Ajout d'un rôle
-const addRole = async (req, res) => {
-  const { label } = req.body;
-
+const addRoles = async (req, res) => {
   try {
-    const query = `INSERT INTO roles (label) VALUES (?)`;
-    const response = await Query.runWithParams(query, [label]);
-
-    res.json({ msg: "Les données ont bien été inséré", response });
+    const response = await Roles.postAddRoles(req.body);
+    res.status(201).json({ msg: "Role ajouté avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error });
   }
 };
 
 // Modification d'un rôle
-const editRole = async (req, res) => {
+const editRoles = async (req, res) => {
   try {
     const { id } = req.params;
-    const query = `UPDATE roles SET label = ? WHERE id = ?`;
-    const data = {...req.body, id};
-    const response = await Query.runWithParams(query, data);
-
+    const response = await Roles.patchEditRoles(id, req.body);
     if(response.affectedRows === 0) {
       return res.status(404).json({ msg: "Role non trouvé" });
     }
@@ -43,13 +51,9 @@ const editRole = async (req, res) => {
 };
 
 // Suppression d'un rôle
-const deleteRole = async (req, res) => {
-  console.log("DELETE ROLE", req.params);
+const deleteRoles = async (req, res) => {
   try {
-    const { id } = req.params;
-    const query = `DELETE FROM roles WHERE id = ?`;
-    const response = await Query.runWithParams(query, [parseInt(id, 10)]);
-
+    const response = await Roles.deleteRolesById(req.params.id);
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Role non trouvé"});
     }
@@ -61,4 +65,4 @@ const deleteRole = async (req, res) => {
 
 
 
-export { getAll, addRole, editRole, deleteRole };
+export { AllRoles, rolesById, addRoles, editRoles, deleteRoles };

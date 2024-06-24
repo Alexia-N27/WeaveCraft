@@ -56,7 +56,7 @@ const deleteAddresses = async (req, res) => {
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Adresse non trouvée" });
     }
-    res.json({ msg: "Adresses supprimé avec succès", response });
+    res.json({ msg: "Adresse supprimé avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur de serveur", error });
   }
