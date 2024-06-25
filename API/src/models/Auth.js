@@ -70,6 +70,44 @@ class Auth {
     const response = await Query.runWithParams(query, data);
     return response;
   }
+
+  static async getUserByEmail(email) {
+    const data = {email};
+    const query = `
+    SELECT users.firstname, users.lastname, users.email, users.password, addresses.*
+    FROM users
+    LEFT JOIN addresses ON users.id = addresses.users_id
+    WHERE users.email = ?`;
+    const response = await Query.runWithParams(query, data);
+    return response;
+  }
+
+  static async patchEditUser(id, body) {
+    const { firstname, lastname, email, password, roles_id } = body;
+    let hashedPassword = password;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const data = [firstname, lastname, email, hashedPassword, roles_id, id];
+
+    const query = `
+    UPDATE users
+    SET firstname = ?, lastname = ?, email = ?, password = ?, roles_id = ?
+    WHERE id = ?
+    `;
+
+    const response = await Query.runWithParams(query, data);
+    return response;
+  }
+
+  static async deleteUserById(id) {
+    const data = [id];
+    const query = `DELETE FROM users WHERE id = ?`;
+    const response = await Query.runWithParams(query, data);
+    return response;
+  }
 }
 
 export default Auth;

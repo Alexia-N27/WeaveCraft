@@ -1,4 +1,3 @@
-import Query from "../models/Query.js";
 import Auth from "../models/Auth.js";
 
 // Inscription des utilisateurs
@@ -18,7 +17,6 @@ const registerUsers = async (req, res) => {
 
     res.status(201).json({ msg: "Inscription réussie", response });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Erreur de serveur", error });
   }
 };
@@ -27,7 +25,6 @@ const registerUsers = async (req, res) => {
 const loginUsers = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const response = await Auth.postLoginUsers({ email, password });
 
     if(response.error) {
@@ -54,13 +51,12 @@ const logoutUsers = async (req, res) => {
 
     res.status(200).json({ msg: response });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: error });
   }
 };
 
 // Affichage de tout les utilisateurs
-const AllUser = async (req, res) => {
+const allUsers = async (req, res) => {
   try {
     const response = await Auth.getAllUser();
     res.json({
@@ -73,7 +69,7 @@ const AllUser = async (req, res) => {
 };
 
 // Affichage d'un utilisateur
-const UserById = async (req, res) => {
+const usersById = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await Auth.getUserById(id);
@@ -83,41 +79,45 @@ const UserById = async (req, res) => {
     }
     res.json({ msg: "Utilisateur récupéré avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur serveur", error });
+    res.status(500).json({ msg: "Erreur du serveur", error });
+  }
+};
+
+// Profil utilisateur
+const usersProfil = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const response = await Auth.getUserByEmail(email);
+
+    if (!response) {
+      return res.status(404).json({ msg: "Utilisateur non trouvé" });
+    }
+    res.json({ msg: "Utilisateur récupéré avec succès", response });
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur du serveur", error });
   }
 };
 
 // Modification d'un utilisateur
-const editUser = async (req, res) => {
-  console.log("EDIT", req.params);
-  console.log(req.body);
+const editUsers = async (req, res) => {
   try {
     const { id } = req.params;
-    const query = `UPDATE users SET firstname = ?, lastname = ?, email = ?, password = ?, roles_id = ? WHERE id = ?`;
-    const data = {...req.body, id};
-    const response = await Query.runWithParams(query, data);
+
+    const response = await Auth.patchEditUser(id, req.body);
 
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
     res.json({ msg: "Utilisateur modifier avec succès", response });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Erreur de server", error });
   }
 };
 
 // Suppression d'un utilisateur
-const deleteUser = async (req, res) => {
-  console.log(req.params);
+const deleteUsers = async (req, res) => {
   try{
-    const { id } = req.params;
-
-    // const queryAddress = `DELETE FROM addresses WHERE user_id = ?`;
-    // await Query.runWithParams(queryAddress, [parseInt(id, 10)]);
-
-    const queryUser = `DELETE FROM users WHERE id = ?`;
-    const response = await Query.runWithParams(queryUser, [parseInt(id, 10)]);
+    const response = await Auth.deleteUserById(req.params.id);
 
     if(response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
@@ -129,4 +129,4 @@ const deleteUser = async (req, res) => {
 };
 
 
-export { AllUser, UserById, registerUsers, loginUsers, logoutUsers, editUser, deleteUser };
+export { allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUsers, editUsers, deleteUsers };

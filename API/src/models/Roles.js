@@ -31,7 +31,7 @@ class Roles {
   }
 
   static async deleteRolesById(id) {
-    const data= id;
+    const data = id;
     const query = `DELETE FROM roles WHERE id = ?`;
     const response = await Query.runWithParams(query, data);
     return response;
