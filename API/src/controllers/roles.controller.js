@@ -1,7 +1,7 @@
 import Roles from "../models/Roles.js";
 
 // Affichage de tout les rôles
-const AllRoles = async (req, res) => {
+const allRoles = async (req, res) => {
   try {
     const response = await Roles.getAllRoles();
     res.json({
@@ -64,5 +64,4 @@ const deleteRoles = async (req, res) => {
 };
 
 
-
-export { AllRoles, rolesById, addRoles, editRoles, deleteRoles };
+export { allRoles, rolesById, addRoles, editRoles, deleteRoles };
