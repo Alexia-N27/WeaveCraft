@@ -1,6 +1,5 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
-import isConnected from "../middlewares/isConnected.js";
 import { allProducts, productsById, addProducts, editProducts, deleteProducts } from "../controllers/products.controller.js";
 
 const router = Router();
@@ -12,12 +11,12 @@ router.get("/", allProducts);
 router.get("/:id", productsById);
 
 // Ajout d'un produit
-router.post("/", addProducts);
+router.post("/", adminRequired, addProducts);
 
 // Modification d'un produit
-router.patch("/:id", editProducts);
+router.patch("/:id", adminRequired, editProducts);
 
 // Suppression d'un produit
-router.delete("/:id", deleteProducts);
+router.delete("/:id", adminRequired, deleteProducts);
 
 export default router;
