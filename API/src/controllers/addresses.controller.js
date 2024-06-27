@@ -9,6 +9,7 @@ const AllAddresses = async (req, res) => {
       response
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ msg: "Erreur de serveur", error });
   }
 };

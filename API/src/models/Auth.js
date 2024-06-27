@@ -56,7 +56,13 @@ class Auth {
   }
 
   static async getAllUser() {
-    const query = `SELECT * FROM users`;
+    const query = `
+    SELECT users.id, firstname, lastname, email, password, roles_id,
+    roles.label AS roles_label
+    FROM users
+    JOIN roles ON users.roles_id = roles.id
+    ORDER BY roles.label
+    `;
     const response = await Query.run(query);
     return response;
   }
@@ -64,8 +70,10 @@ class Auth {
   static async getUserById(id) {
     const data = {id};
     const query = `
-    SELECT users.id, firstname, lastname, email, password, roles_id
+    SELECT users.id, firstname, lastname, email, password, roles_id,
+    roles.label AS roles_label
     FROM users
+    JOIN roles ON users.roles_id = roles.id
     WHERE users.id = ?`;
     const response = await Query.runWithParams(query, data);
     return response;

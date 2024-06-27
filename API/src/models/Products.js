@@ -2,7 +2,13 @@ import Query from "./Query.js";
 
 class Products {
   static async getAllProduct() {
-    const query = `SELECT * FROM products`;
+    const query = `
+    SELECT products.id, title, undertitle, description, picture, alt,
+    price, ref, quantityInStock, categories_id, categories.label AS categories_name
+    FROM products
+    JOIN categories ON products.categories_id = categories.id
+    ORDER BY products.id
+    `;
     const response = await Query.run(query);
     return response;
   }
@@ -11,9 +17,10 @@ class Products {
     const data = {id};
     const query = `
     SELECT products.id, title, undertitle, description, picture, alt,
-    price, ref, quantityInStock, categories_id
+    price, ref, quantityInStock, categories_id, categories.label AS categories_name
     FROM products
-    WHERE id = ?
+    JOIN categories ON products.categories_id = categories.id
+    WHERE products.id = ?
     `;
     const response = await Query.runWithParams(query, data);
     return response;

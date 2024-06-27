@@ -2,7 +2,16 @@ import Query from "./Query.js";
 
 class Pictures {
   static async getAllPictures() {
-    const query = `SELECT * FROM additionalPictures`;
+    const query = `
+    SELECT additionalPictures.id,
+    additionalPictures.picture_src,
+    additionalPictures.alt,
+    additionalPictures.products_id,
+    products.title AS products_name
+    FROM additionalPictures
+    JOIN products ON additionalPictures.products_id = products.id
+    ORDER BY products.title
+    `;
     const response = await Query.run(query);
     return response;
   }
@@ -10,9 +19,14 @@ class Pictures {
   static async getPicturesById(id) {
     const data = {id};
     const query = `
-    SELECT additionalPictures.id, picture_src, alt, products_id
+    SELECT additionalPictures.id,
+    additionalPictures.picture_src,
+    additionalPictures.alt,
+    additionalPictures.products_id,
+    products.title AS products_name
     FROM additionalPictures
-    WHERE id = ?
+    JOIN products ON additionalPictures.products_id = products.id
+    WHERE additionalPictures.id = ?
     `;
     const response = await Query.runWithParams(query, data);
     return response;

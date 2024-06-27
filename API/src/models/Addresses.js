@@ -2,15 +2,39 @@ import Query from "./Query.js";
 
 class Addresses {
   static async getAllAddresses() {
-    const query = `SELECT * FROM addresses`;
+    const query = `
+    SELECT addresses.id,
+    addresses.address_type,
+    addresses.street,
+    addresses.complement,
+    addresses.city,
+    addresses.zip_code,
+    addresses.country,
+    addresses.users_id,
+    users.firstname,
+    users.lastname
+    FROM addresses
+    JOIN users ON addresses.users_id = users.id
+    ORDER BY users.lastname ASC
+    `;
     const response = await Query.run(query);
     return response;
   }
 
   static async getAddressesById(id) {
     const query = `
-    SELECT addresses.id, address_type, street, complement, city, zip_code, country, users_id
+    SELECT addresses.id,
+    addresses.address_type,
+    addresses.street,
+    addresses.complement,
+    addresses.city,
+    addresses.zip_code,
+    addresses.country,
+    addresses.users_id,
+    users.firstname,
+    users.lastname
     FROM addresses
+    JOIN users ON addresses.users_id = users.id
     WHERE addresses.id = ?
     `;
     const data = {id};
