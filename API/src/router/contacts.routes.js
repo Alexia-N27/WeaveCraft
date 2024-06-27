@@ -5,18 +5,18 @@ import { allMessages, messageById, addMessage, editMessage, deleteMessage } from
 const router = Router();
 
 // Affichage de tous les messages
-router.get("/", allMessages);
+router.get("/", adminRequired, allMessages);
 
 // Affichage d'un message
-router.get("/:id", messageById);
+router.get("/:id", adminRequired, messageById);
 
 // Ajout d'un message
 router.post("/", addMessage);
 
 // Modification d'un message
-router.patch("/:id", editMessage);
+router.patch("/:id", adminRequired, editMessage);
 
 // Suppression d'un message
-router.delete("/:id", deleteMessage);
+router.delete("/:id", adminRequired, deleteMessage);
 
 export default router;

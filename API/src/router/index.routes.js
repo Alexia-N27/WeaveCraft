@@ -7,6 +7,7 @@ import contacts_router from "./contacts.routes.js";
 import categories_router from "./categories.routes.js";
 import products_router from "./products.routes.js";
 import additionalPictures_router from "./additionalPictures.routes.js";
+import orders_router from "./orders.routes.js";
 
 const router = Router();
 const BASE_API = "/api/v1";
@@ -23,6 +24,7 @@ router.use(`${BASE_API}/contacts`, contacts_router);
 router.use(`${BASE_API}/categories`, categories_router);
 router.use(`${BASE_API}/products`, products_router);
 router.use(`${BASE_API}/additionalPictures`, additionalPictures_router);
+router.use(`${BASE_API}/orders`, orders_router);
 
 
 export default router;
