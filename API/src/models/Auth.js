@@ -3,27 +3,12 @@ import bcrypt from "bcrypt";
 
 class Auth {
   static async postRegisterUsers(userData) {
-    const queryCheckUser = `SELECT * FROM users WHERE email = ?`;
-    const existingUser = await Query.runWithParams(queryCheckUser, [userData.email]);
-    if(existingUser.length > 0) {
-      return { error: "Cet utilisateur existe déjà" };
-    }
-
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-
     const queryInsertUser = `
     INSERT INTO users (firstname, lastname, email, password)
     VALUES (?, ?, ?, ?)
     `;
 
-    const newUser = [
-      userData.firstname,
-      userData.lastname,
-      userData.email,
-      hashedPassword
-    ];
-
-    const response = await Query.runWithParams(queryInsertUser, newUser);
+    const response = await Query.runWithParams(queryInsertUser, userData);
     return response;
   }
 
@@ -43,17 +28,6 @@ class Auth {
     return { succes: "Connexion réussie !", user: infoUser };
   }
 
-  static async getLogoutUser(session) {
-    return new Promise((resolve, reject) => {
-      session.destroy(err => {
-        if (err) {
-          reject("Erreur lors de la déconnexion.");
-        } else {
-          resolve("Déconnexion réussie");
-        }
-      });
-    });
-  }
 
   static async getAllUser() {
     const query = `
@@ -79,8 +53,7 @@ class Auth {
     return response;
   }
 
-  static async getUserByEmail(email) {
-    const data = {email};
+  static async getUserByEmail(data) {
     const query = `
     SELECT users.firstname, users.lastname, users.email, users.password, addresses.*
     FROM users
@@ -110,11 +83,17 @@ class Auth {
     return response;
   }
 
-  static async deleteUserById(id) {
-    const data = [id];
-    const query = `DELETE FROM users WHERE id = ?`;
-    const response = await Query.runWithParams(query, data);
-    return response;
+  /**
+     * Delete a user by id from the database.
+     * @param {Object} data - Object contain id of the user to delete.
+     * @returns {Promise} A promise that resolves to the query result or an error.
+     */
+  static async deleteUserById(data) {
+    try {
+      return await Query.runWithParams(`DELETE FROM users WHERE id = ?`, data);
+    } catch (err) {
+      return err;
+    }
   }
 }
 

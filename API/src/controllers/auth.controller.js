@@ -3,18 +3,23 @@ import Auth from "../models/Auth.js";
 // Inscription des utilisateurs
 const registerUsers = async (req, res) => {
   try {
+    const {data} = req.body.email;
+    const existingUser = await Auth.getUserByEmail(data);
+    if(existingUser.length > 0) {
+      return res
+        .status(409)
+        .json({ msg: "Cet utilisateur existe déjà." });
+    }
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     const userData = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       email: req.body.email,
-      password: req.body.password
+      password: hashedPassword
     };
 
     const response = await Auth.postRegisterUsers(userData);
-    if (response.error) {
-      return res.status(409).json({ msg: response.error });
-    }
-
     res.status(201).json({ msg: "Inscription réussie", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur de serveur", error });
@@ -40,19 +45,17 @@ const loginUsers = async (req, res) => {
 
 // Déconnexion utilisateur
 const logoutUsers = async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.status(401).json({ msg: "Utilisateur non connecté." });
-    }
-
-    const response = await Auth.getLogoutUser(req.session);
-
-    res.clearCookie("session_id");
-
-    res.status(200).json({ msg: response });
-  } catch (error) {
-    res.status(500).json({ msg: error });
-  }
+  // Destroy the current session
+  req.session.destroy((err) => {
+      if(err){
+          // If an error occurs during session destruction, send a 500 status response with an error message
+          return res.status(500).json({message: "Erreur de serveur"});
+      }
+      // Clear the session cookie
+      res.clearCookie("session_id");
+      // Send a 200 status response with a success message
+      res.status(200).json({message: "Déconnexion réussie"});
+  });
 };
 
 // Affichage de tout les utilisateurs
@@ -117,7 +120,8 @@ const editUsers = async (req, res) => {
 // Suppression d'un utilisateur
 const deleteUsers = async (req, res) => {
   try{
-    const response = await Auth.deleteUserById(req.params.id);
+    const {data} = req.params.id;
+    const response = await Auth.deleteUserById(data);
 
     if(response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
