@@ -44,6 +44,13 @@ class Orders {
     const response = await Query.runWithParams(query, data);
     return response;
   }
+
+  static async deleteOrdersById(id) {
+    const data = id;
+    const query = `DELETE FROM orders WHERE id = ?`;
+    const response = await Query.runWithParams(query, data);
+    return response;
+  }
 }
 
 

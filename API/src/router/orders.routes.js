@@ -1,6 +1,6 @@
 import { Router } from "express";
 import isConnected from "../middlewares/isConnected.js";
-import { allOrders, ordersById, addOrders, editOrders } from "../controllers/orders.controller.js";
+import { allOrders, ordersById, addOrders, editOrders, deleteOrders } from "../controllers/orders.controller.js";
 
 const router = Router();
 
@@ -21,7 +21,7 @@ router.post("/", isConnected, addOrders);
 router.patch("/:id", editOrders);
 
 // Suppression d'une commande
-
+router.delete("/:id", deleteOrders);
 
 
 export default router;
