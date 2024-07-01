@@ -20,7 +20,7 @@ router.post('/register', registerUsers);
 // Connexion des utilisateurs
 router.post('/login', loginUsers);
 // Déconnexion - ajout middle isConnected
-router.post('/logout', isConnected, logoutUsers);
+router.post('/logout', logoutUsers);
 
 // Modification d'un utilisateur
 router.patch("/:id", editUsers);

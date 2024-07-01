@@ -1,4 +1,5 @@
 import Auth from "../models/Auth.js";
+import bcrypt from "bcrypt";
 
 // Inscription des utilisateurs
 const registerUsers = async (req, res) => {
@@ -22,7 +23,7 @@ const registerUsers = async (req, res) => {
     const response = await Auth.postRegisterUsers(userData);
     res.status(201).json({ msg: "Inscription réussie", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur de serveur", error: error.message });
   }
 };
 
@@ -30,31 +31,38 @@ const registerUsers = async (req, res) => {
 const loginUsers = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const response = await Auth.postLoginUsers({ email, password });
+    const [user] = await Auth.getUserByEmail({email});
 
-    if(response.error) {
-      return res.status(401).json({ msg: response.error });
+    if (!email || !password) {
+      return res
+      .status(400)
+      .json({ msg: "Veuillez fournir un email et un mot de passe." });
     }
 
-    req.session.user = response.user;
-    res.status(200).json({ msg: response.succes, user: response.user });
+    if(!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ msg: "Email ou mot de passe incorrect." });
+    }
+
+    const infoUser = {
+      firstname: user.firstname,
+      roles_id: user.roles_id,
+    };
+
+    req.session.user = infoUser;
+    res.status(200).json({ msg: "Connexion réussie !", user: infoUser });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur lors de la connexion." });
+    res.status(500).json({ msg: "Erreur lors de la connexion.", error: error.message });
   }
 };
 
 // Déconnexion utilisateur
 const logoutUsers = async (req, res) => {
-  // Destroy the current session
-  req.session.destroy((err) => {
-      if(err){
-          // If an error occurs during session destruction, send a 500 status response with an error message
-          return res.status(500).json({message: "Erreur de serveur"});
+  req.session.destroy((error) => {
+      if(error){
+          return res.status(500).json({msg: "Erreur de serveur", error: error.message});
       }
-      // Clear the session cookie
       res.clearCookie("session_id");
-      // Send a 200 status response with a success message
-      res.status(200).json({message: "Déconnexion réussie"});
+      res.status(200).json({msg: "Déconnexion réussie"});
   });
 };
 
@@ -62,12 +70,14 @@ const logoutUsers = async (req, res) => {
 const allUsers = async (req, res) => {
   try {
     const response = await Auth.getAllUser();
-    res.json({
+    res
+    .status(200)
+    .json({
       msg: "Tout les utilisateurs ont été récupéré avec succès.",
       response
     });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error});
+    res.status(500).json({ msg: "Erreur de serveur", error: error.message});
   }
 };
 
@@ -77,12 +87,14 @@ const usersById = async (req, res) => {
     const { id } = req.params;
     const response = await Auth.getUserById(id);
 
-    if(!response) {
+    if(response.length === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-    res.json({ msg: "Utilisateur récupéré avec succès", response });
+    res
+    .status(200)
+    .json({ msg: "Utilisateur récupéré avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur du serveur", error });
+    res.status(500).json({ msg: "Erreur du serveur", error: error.message });
   }
 };
 
@@ -90,30 +102,36 @@ const usersById = async (req, res) => {
 const usersProfil = async (req, res) => {
   try {
     const { email } = req.params;
-    const response = await Auth.getUserByEmail(email);
+    const response = await Auth.getUserByEmail({email});
 
-    if (!response) {
+    if (response.length === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-    res.json({ msg: "Utilisateur récupéré avec succès", response });
+    res
+    .status(200)
+    .json({ msg: "Utilisateur récupéré avec succès", response });
+
   } catch (error) {
-    res.status(500).json({ msg: "Erreur du serveur", error });
+    res.status(500).json({ msg: "Erreur du serveur", error: error.message });
   }
 };
 
 // Modification d'un utilisateur
 const editUsers = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { firstname, lastname, email, password, roles_id } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = { firstname, lastname, email, password: hashedPassword, roles_id, id: req.params.id };
 
-    const response = await Auth.patchEditUser(id, req.body);
-
+    const response = await Auth.patchEditUser(userData);
+    console.log(userData);
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-    res.json({ msg: "Utilisateur modifier avec succès", response });
+
+    res.status(200).json({ msg: "Utilisateur modifié avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de server", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
