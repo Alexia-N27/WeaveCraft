@@ -4,23 +4,31 @@ import bcrypt from "bcrypt";
 // Inscription des utilisateurs
 const registerUsers = async (req, res) => {
   try {
-    const {data} = req.body.email;
-    const existingUser = await Auth.getUserByEmail(data);
+    const email = req.body.email;
+    const existingUser = await Auth.getUserByEmail(email);
+
     if(existingUser.length > 0) {
       return res
         .status(409)
         .json({ msg: "Cet utilisateur existe déjà." });
     }
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const userData = {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      password: hashedPassword
-    };
+    const userData = [
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+      hashedPassword
+    ];
 
     const response = await Auth.postRegisterUsers(userData);
+
+    if (response.error) {
+      return res
+        .status(500)
+        .json({ msg: "Erreur lors de l'inscription", error: error.message });
+    }
+
     res.status(201).json({ msg: "Inscription réussie", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur de serveur", error: error.message });
@@ -31,7 +39,7 @@ const registerUsers = async (req, res) => {
 const loginUsers = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const [user] = await Auth.getUserByEmail({email});
+    const user = await Auth.getUserByEmail(email);
 
     if (!email || !password) {
       return res
@@ -39,13 +47,17 @@ const loginUsers = async (req, res) => {
       .json({ msg: "Veuillez fournir un email et un mot de passe." });
     }
 
-    if(!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ msg: "Email ou mot de passe incorrect." });
+    if(!user || !(await bcrypt.compare(password, user[0].password))) {
+      return res
+        .status(401)
+        .json({ msg: "Email ou mot de passe incorrect." });
     }
 
     const infoUser = {
-      firstname: user.firstname,
-      roles_id: user.roles_id,
+      id: user[0].id,
+      firstname: user[0].firstname,
+      email: user[0].email,
+      roles_id: user[0].roles_id,
     };
 
     req.session.user = infoUser;
@@ -59,7 +71,9 @@ const loginUsers = async (req, res) => {
 const logoutUsers = async (req, res) => {
   req.session.destroy((error) => {
       if(error){
-          return res.status(500).json({msg: "Erreur de serveur", error: error.message});
+          return res
+            .status(500)
+            .json({msg: "Erreur de serveur", error: error.message});
       }
       res.clearCookie("session_id");
       res.status(200).json({msg: "Déconnexion réussie"});
@@ -86,7 +100,6 @@ const usersById = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await Auth.getUserById(id);
-
     if(response.length === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
@@ -101,15 +114,14 @@ const usersById = async (req, res) => {
 // Profil utilisateur
 const usersProfil = async (req, res) => {
   try {
-    const { email } = req.params;
-    const response = await Auth.getUserByEmail({email});
-
-    if (response.length === 0) {
+    const response = await Auth.getUserByEmailDetail(req.session.user.email);
+    console.log(response);
+    if (response[0][0].length === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
     res
     .status(200)
-    .json({ msg: "Utilisateur récupéré avec succès", response });
+    .json({ msg: "Utilisateur récupéré avec succès", response: response[0][0] });
 
   } catch (error) {
     res.status(500).json({ msg: "Erreur du serveur", error: error.message });
@@ -121,14 +133,22 @@ const editUsers = async (req, res) => {
   try {
     const { firstname, lastname, email, password, roles_id } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userData = { firstname, lastname, email, password: hashedPassword, roles_id, id: req.params.id };
+    const userData = [firstname, lastname, email, hashedPassword, roles_id, req.session.user.id ];
 
     const response = await Auth.patchEditUser(userData);
-    console.log(userData);
+
+    if (response.error) {
+      return res
+        .status(500)
+        .json({
+          msg: "Erreur lors de la mise à jour de l'utilisateur",
+          error: response.error.message
+        });
+    }
+
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-
     res.status(200).json({ msg: "Utilisateur modifié avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
@@ -138,15 +158,15 @@ const editUsers = async (req, res) => {
 // Suppression d'un utilisateur
 const deleteUsers = async (req, res) => {
   try{
-    const {data} = req.params.id;
-    const response = await Auth.deleteUserById(data);
+    const id = req.params.id;
+    const response = await Auth.deleteUserById(id);
 
     if(response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
     res.json({ msg: "Utilisateur supprimé avec succès" });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 

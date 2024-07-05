@@ -5,25 +5,22 @@ import { allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUser
 
 const router = Router();
 
-// Session
-router.get("/");
-
 // Affichage de tout les utilisateur
 router.get("/users", adminRequired, allUsers);
 // Affichage d'un utilisateur
-router.get("/:id", adminRequired, usersById);
+router.get("/admin/:id", adminRequired, usersById);
 // Route pour afficher la page profil(en fonction de l'email)
-router.get("/profil/:email", isConnected, usersProfil);
+router.get("/profil", isConnected, usersProfil);
 
 // Inscription des utilisateurs
 router.post('/register', registerUsers);
 // Connexion des utilisateurs
 router.post('/login', loginUsers);
-// Déconnexion - ajout middle isConnected
-router.post('/logout', logoutUsers);
+// Déconnexion
+router.post('/logout', isConnected, logoutUsers);
 
 // Modification d'un utilisateur
-router.patch("/:id", editUsers);
+router.patch("/edit", isConnected, editUsers);
 // Suppression d'un utilisateur
 router.delete("/:id", adminRequired, deleteUsers);
 
