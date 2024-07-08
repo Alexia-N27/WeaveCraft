@@ -91,7 +91,7 @@ class Auth {
       const response = await pool.execute(`DELETE FROM users WHERE id = ?`, [id]);
       return response[0];
     } catch (error) {
-      return error;
+      return { error: error.message };
     }
   }
 }

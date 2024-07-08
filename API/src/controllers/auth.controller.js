@@ -26,12 +26,12 @@ const registerUsers = async (req, res) => {
     if (response.error) {
       return res
         .status(500)
-        .json({ msg: "Erreur lors de l'inscription", error: error.message });
+        .json({ msg: "Erreur lors de l'inscription", error: response.error.message });
     }
 
     res.status(201).json({ msg: "Inscription réussie", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error: error.message });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
@@ -73,7 +73,7 @@ const logoutUsers = async (req, res) => {
       if(error){
           return res
             .status(500)
-            .json({msg: "Erreur de serveur", error: error.message});
+            .json({msg: "Erreur serveur", error: error.message});
       }
       res.clearCookie("session_id");
       res.status(200).json({msg: "Déconnexion réussie"});
@@ -87,11 +87,11 @@ const allUsers = async (req, res) => {
     res
     .status(200)
     .json({
-      msg: "Tout les utilisateurs ont été récupéré avec succès.",
+      msg: "Tout les utilisateurs ont été récupérés avec succès.",
       response
     });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error: error.message});
+    res.status(500).json({ msg: "Erreur serveur", error: error.message});
   }
 };
 
@@ -107,7 +107,7 @@ const usersById = async (req, res) => {
     .status(200)
     .json({ msg: "Utilisateur récupéré avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur du serveur", error: error.message });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
@@ -124,7 +124,7 @@ const usersProfil = async (req, res) => {
     .json({ msg: "Utilisateur récupéré avec succès", response: response[0][0] });
 
   } catch (error) {
-    res.status(500).json({ msg: "Erreur du serveur", error: error.message });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
@@ -164,7 +164,7 @@ const deleteUsers = async (req, res) => {
     if(response.affectedRows === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-    res.json({ msg: "Utilisateur supprimé avec succès" });
+    res.json({ msg: "Utilisateur supprimé avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
