@@ -10,7 +10,6 @@ const AllAddresses = async (req, res) => {
       response
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
@@ -19,6 +18,7 @@ const AllAddresses = async (req, res) => {
 const AddressesById = async (req, res) => {
   try {
     const response = await Addresses.getAddressesById(req.params.id);
+
     if (!response) {
       return res.status(404).json({ msg: "Adresse non trouvée"});
     }
