@@ -13,7 +13,7 @@ const router = Router();
 const BASE_API = "/api/v1";
 
 // // http://localhost:9000/
-// router.get("/", getHomePage);
+// router.get("/");
 
 
 router.use(`${BASE_API}/auth`, auth_router);

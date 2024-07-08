@@ -4,7 +4,9 @@ import Contacts from "../models/Contacts.js";
 const allMessages = async (req, res) => {
   try {
     const response = await Contacts.getAllMessages();
-    res.status(200)
+
+    res
+    .status(200)
     .json({
       msg: "Tout les messages on été récupéré avec succès.",
       response

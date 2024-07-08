@@ -1,40 +1,53 @@
-import Query from "./Query.js";
+import pool from "../config/db.js";
 
 class Categories {
   static async getAllCategories() {
-    const query = `SELECT label FROM categories`;
-    const response = await Query.run(query);
-    return response;
+    try {
+      const query = `SELECT label FROM categories`;
+      const response = await pool.query(query);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async getCategoriesById(id) {
-    const query = `SELECT categories.id, label FROM categories WHERE id = ?`;
-    const data = {id};
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const query = `SELECT categories.id, label FROM categories WHERE id = ?`;
+      const response = await pool.execute(query, [id]);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async postAddCategories(data) {
-    const query = `
-    INSERT INTO categories (label)
-    VALUES (?)
-    `;
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const query = `INSERT INTO categories (label) VALUES (?)`;
+      const response = await pool.execute(query, data);
+      return response;
+    } catch (error) {
+      return { errror: error.message };
+    }
   }
 
-  static async patchEditCategories(id, body) {
-    const data = {...body, id};
-    const query = `UPDATE categories SET label = ? WHERE id = ?`;
-    const response = await Query.runWithParams(query, data);
-    return response;
+  static async patchEditCategories(body) {
+    try {
+      const query = `UPDATE categories SET label = ? WHERE id = ?`;
+      const response = await pool.execute(query, body);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async deleteCategoriesById(id) {
-    const data = id;
-    const query = `DELETE FROM categories WHERE id = ?`;
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const response = await pool.execute(`DELETE FROM categories WHERE id = ?`, [id]);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 }
 
