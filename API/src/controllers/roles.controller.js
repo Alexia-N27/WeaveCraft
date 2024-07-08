@@ -80,7 +80,7 @@ const deleteRoles = async (req, res) => {
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Role non trouvé"});
     }
-    res.json({ msg: "Role supprimer avec succès", response });
+    res.status(200).json({ msg: "Role supprimer avec succès", response });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
