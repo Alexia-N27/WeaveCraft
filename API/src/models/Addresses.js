@@ -65,7 +65,9 @@ class Addresses {
   static async patchEditAddresses(body) {
     try {
       const query = `
-      UPDATE addresses SET address_type = ?, street = ?, complement = ?, city = ?, zip_code = ?, country = ?, users_id = ?
+      UPDATE addresses
+      SET address_type = ?, street = ?, complement = ?, city = ?,
+      zip_code = ?, country = ?, users_id = ?
       WHERE id = ?
       `;
       const response = await pool.execute(query, body);

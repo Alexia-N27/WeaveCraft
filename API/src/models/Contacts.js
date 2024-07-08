@@ -1,49 +1,65 @@
-import Query from "./Query.js";
+import pool from "../config/db.js";
 
 class Contacts {
   static async getAllMessages() {
-    const query = `SELECT * FROM contacts`;
-    const response = Query.run(query);
-    return response;
+    try {
+      const query = `
+      SELECT contacts.id, firstname, lastname, email, subject, content,
+      readMessage, created_at
+      FROM contacts
+      `;
+      const response = await pool.query(query);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async getMessageById(id) {
-    const data = {id};
-    const query = `
-    SELECT contacts.id, firstname, lastname, email, subject, content,
-    readMessage, created_at
-    FROM contacts
-    WHERE id = ?
-    `;
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const query = `
+      SELECT contacts.id, firstname, lastname, email, subject, content,
+      readMessage, created_at
+      FROM contacts
+      WHERE id = ?
+      `;
+      const response = await pool.execute(query, [id]);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async postAddMessage(data) {
-    const query = `
-    INSERT INTO contacts (firstname, lastname, email, subject, content)
-    VALUES (?, ?, ?, ?, ?)
-    `;
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const query = `
+      INSERT INTO contacts (firstname, lastname, email, subject, content)
+      VALUES (?, ?, ?, ?, ?)
+      `;
+      const response = await pool.execute(query, data);
+      return response;
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
-  static async patchEditMessage(id, body) {
-    const data = {...body, id};
-    const query = `
-    UPDATE contacts
-    SET readMessage = ?
-    Where id = ?
-    `;
-    const response = await Query.runWithParams(query, data);
-    return response;
+  static async patchEditMessage(body) {
+    try {
+      const query = `UPDATE contacts SET readMessage = ? Where id = ?`;
+      const response = await pool.execute(query, body);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async deleteMessageById(id) {
-    const data = id;
-    const query = `DELETE FROM contacts WHERE id = ?`;
-    const response = await Query.runWithParams(query, data);
-    return response;
+    try {
+      const response = await pool.execute(`DELETE FROM contacts WHERE id = ?`, [id]);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 }
 
