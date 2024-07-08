@@ -1,6 +1,5 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
-import isConnected from "../middlewares/isConnected.js";
 import { AllAddresses, AddressesById, addAddresses, editAddresses, deleteAddresses } from "../controllers/addresses.controller.js";
 
 const router = Router();
@@ -9,16 +8,16 @@ const router = Router();
 router.get("/", adminRequired, AllAddresses);
 
 // Affichage d'une adresse
-router.get("/:id", isConnected, AddressesById);
+router.get("/admin/:id", adminRequired, AddressesById);
 
 // Ajout d'une adresse
 router.post("/", addAddresses);
 
 // Modification d'une adresse
-router.patch("/:id", isConnected, editAddresses);
+router.patch("/:id", adminRequired, editAddresses);
 
 // Suppression d'une adresse
-router.delete("/:id", isConnected, deleteAddresses);
+router.delete("/:id", adminRequired, deleteAddresses);
 
 
 export default router;
