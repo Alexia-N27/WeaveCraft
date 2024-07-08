@@ -4,12 +4,15 @@ import Products from "../models/Products.js";
 const allProducts = async (req, res) => {
   try {
     const response = await Products.getAllProduct();
-    res.json({
+
+    res
+    .status(200)
+    .json({
       msg: "Tout les produits on été récupéré avec succès.",
       response
     });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
@@ -17,49 +20,103 @@ const allProducts = async (req, res) => {
 const productsById = async (req, res) => {
   try {
     const response = await Products.getProductsById(req.params.id);
+
     if (!response) {
-      return res.json({ msg: "Produit non trouvé" });
+      return res.status(404).json({ msg: "Produit non trouvé" });
     }
-    res.json ({ msg: "Produits récupéré avec succès", response });
+    res.status(200).json ({ msg: "Produits récupéré avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur" });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
 // Ajout d'un produit
 const addProducts = async (req, res) => {
   try {
-    const response = await Products.postAddProducts(req.body);
+    const {
+      title,
+      undertitle,
+      description,
+      picture,
+      alt,
+      price,
+      ref,
+      quantityInStock,
+      categories_id
+    } = req.body;
+
+    const productData = [
+      title, undertitle, description, picture, alt, price,
+      ref, quantityInStock, categories_id
+    ];
+
+    const response = await Products.postAddProducts(productData);
+
+    if (response.error) {
+      return res.status(500).json({
+        msg: "Erreur lors de l'ajout du produit",
+        error: response.error
+      });
+    }
+
     res.status(201).json({ msg: "Produit ajouté avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur de serveur", error: error.message });
   }
 };
 
 // Modification d'un produit
 const editProducts = async (req, res) => {
   try {
-    const {id} = req.params;
-    const response = await Products.patchEditProducts(id, req.body);
+    const {
+      title,
+      undertitle,
+      description,
+      picture,
+      alt,
+      price,
+      ref,
+      quantityInStock,
+      categories_id
+    } = req.body;
+
+    const productData = [
+      title, undertitle, description, picture, alt, price,
+      ref, quantityInStock, categories_id, req.params.id
+    ];
+
+    const response = await Products.patchEditProducts(productData);
+
+    if (response.error) {
+      return res
+        .status(500)
+        .json({
+          msg: "Erreur lors de la mise à jour du produit",
+          error: response.error.message
+        });
+    }
+
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Produits non trouvé" });
     }
-    res.json({ msg: "Produit modifier avec succès", response });
+    res.status(200).json({ msg: "Produit modifier avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
 // Suppression d'un produit
 const deleteProducts = async (req, res) => {
   try {
-    const response = Products.deleteProductsById(req.params.id);
+    const id = req.params.id;
+    const response = await Products.deleteProductsById(id);
+
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Produit non trouvé" });
     }
-    res.json({ msg: "Produit supprimé avec succès", response });
+    res.status(200).json({ msg: "Produit supprimé avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur de serveur", error: error.message });
   }
 };
 
