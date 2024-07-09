@@ -1,27 +1,27 @@
 import { Router } from "express";
 import isConnected from "../middlewares/isConnected.js";
-import { allOrders, ordersById, addOrders, editOrders, deleteOrders } from "../controllers/orders.controller.js";
+import adminRequired from "../middlewares/adminRequired.js";
+import { allOrders, ordersById, ordersByUser, addOrders, editOrders, deleteOrders } from "../controllers/orders.controller.js";
 
 const router = Router();
 
 // Affichage de toutes les commandes
-router.get("/", allOrders);
+router.get("/", adminRequired, allOrders);
 
-// Affichage de toutes les commandes pour l'utilisateur par email.
+// Affichage de toutes les commandes d'un utilisateur
+router.get("/profil", isConnected, ordersByUser);
 
 // Affichage d'une commande
-router.get("/:id", ordersById);
-
-// Affichage d'une commande pour l'utilisateur par email.
+router.get("/admin/:id", adminRequired, ordersById);
 
 // Ajout d'une commande
 router.post("/", isConnected, addOrders);
 
 // Modification d'une commande
-router.patch("/:id", editOrders);
+router.patch("/:id", adminRequired, editOrders);
 
 // Suppression d'une commande
-router.delete("/:id", deleteOrders);
+router.delete("/:id", adminRequired, deleteOrders);
 
 
 export default router;

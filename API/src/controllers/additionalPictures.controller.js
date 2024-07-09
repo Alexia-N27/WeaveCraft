@@ -4,12 +4,15 @@ import Pictures from "../models/AdditionalPictures.js";
 const allPictures = async (req, res) => {
   try {
     const response = await Pictures.getAllPictures();
-    res.json({
+
+    res
+    .status(200)
+    .json({
       msg: "Toutes les images ont été récupérées avec succès.",
       response
     });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
@@ -17,49 +20,77 @@ const allPictures = async (req, res) => {
 const picturesById = async (req, res) => {
   try {
     const response = await Pictures.getPicturesById(req.params.id);
+
     if (!response) {
-      return res.json({ msg: "Image non trouvée" });
+      return res.status(404).json({ msg: "Image non trouvée" });
     }
-    res.json({ msg: "Image récupérée avec succès", response });
+    res.status(200).json({ msg: "Image récupérée avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
 // Ajout d'une image
 const addPictures = async (req, res) => {
   try {
-    const response = await Pictures.postAddPictures(req.body);
+    const { picture_src, alt, products_id } = req.body;
+
+    const pictureData = [picture_src, alt, products_id];
+
+    const response = await Pictures.postAddPictures(pictureData);
+
+    if (response.error) {
+      return res.status(500).json({
+        msg: "Erreur lors de l'ajout de l'image",
+        error: response.error
+      });
+    }
+
     res.status(201).json({ msg: "Image ajoutée avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
 // Modification d'une image
 const editPictures = async (req, res) => {
   try {
-    const {id} = req.params;
-    const response = await Pictures.patchEditPictures(id, req.body);
+    const { picture_src, alt, products_id } = req.body;
+
+    const pictureData = [picture_src, alt, products_id, req.params.id];
+
+    const response = await Pictures.patchEditPictures(pictureData);
+
+    if (response.error) {
+      return res
+        .status(500)
+        .json({
+          msg: "Erreur lors de la mise à jour de l'image",
+          error: response.error.message
+        });
+    }
+
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Image non trouvée" });
     }
-    res.json({ msg: "Image modifiées avec succès", response });
+    res.status(200).json({ msg: "Image modifiées avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
 // Suppression d'une image
 const deletePictures = async (req, res) => {
   try {
-    const response = await Pictures.deletePicturesById(req.params.id);
+    const id = req.params.id;
+    const response = await Pictures.deletePicturesById(id);
+
     if (response.affectedRows === 0) {
       return res.status(404).json({ msg: "Image non trouvée" });
     }
-    res.json({ msg: "Image supprimée avec succès", response });
+    res.status(200).json({ msg: "Image supprimée avec succès", response });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur de serveur", error });
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
 
