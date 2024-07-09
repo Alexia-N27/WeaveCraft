@@ -8,7 +8,7 @@ const router = Router();
 // Affichage de toutes les commandes
 router.get("/", adminRequired, allOrders);
 
-// Affichage de toutes les commandes d'un utilisateur
+// Affichage de toutes les commandes pour utilisateur
 router.get("/profil", isConnected, ordersByUser);
 
 // Affichage d'une commande

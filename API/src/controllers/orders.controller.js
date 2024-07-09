@@ -104,7 +104,6 @@ const editOrders = async (req, res) => {
 const deleteOrders = async (req, res) => {
   try {
     const id = req.params.id;
-
     const response = await Orders.deleteOrdersById(id);
 
     if (response.affectedRows === 0) {
