@@ -4,8 +4,14 @@ class Orders {
   static async getAllOrders() {
     try {
       const query = `
-      SELECT orders.id, orders.date, orders.ref, orders.productsQuantity,
-      orders.totalPrice, orders.users_id, users.firstname, users.lastname
+      SELECT orders.id AS order_id,
+      orders.date,
+      orders.ref AS order_ref,
+      orders.productsQuantity AS products_total,
+      orders.totalPrice,
+      orders.users_id,
+      users.firstname,
+      users.lastname
       FROM orders
       JOIN users ON orders.users_id = users.id
       `;
@@ -19,10 +25,23 @@ class Orders {
   static async getOrdersById(id) {
     try {
       const query = `
-      SELECT orders.id, orders.date, orders.ref, orders.productsQuantity,
-      orders.totalPrice, orders.users_id, users.firstname, users.lastname
+      SELECT orders.id AS order_id,
+      orders.date,
+      orders.ref AS order_ref,
+      orders.productsQuantity AS products_total,
+      orders.totalPrice,
+      orders.users_id,
+      users.firstname,
+      users.lastname,
+      orderDetails.products_id AS product_id,
+      products.title AS product_title,
+      products.ref AS product_ref,
+      orderDetails.price AS product_price,
+      orderDetails.quantity AS product_quantity
       FROM orders
       JOIN users ON orders.users_id = users.id
+      JOIN orderDetails ON orderDetails.orders_id = orders.id
+      JOIN products ON orderDetails.products_id = products.id
       WHERE orders.id = ?
       `;
       const response = await pool.execute(query, [id]);
@@ -35,10 +54,20 @@ class Orders {
   static async getOrdersByUserId(userId) {
     try {
       const query = `
-      SELECT orders.id, orders.date, orders.ref, orders.productsQuantity,
-      orders.totalPrice, orders.users_id, users.firstname, users.lastname
+      SELECT orders.id AS order_id,
+      orders.date,
+      orders.ref AS order_ref,
+      orders.productsQuantity AS products_total,
+      orders.totalPrice,
+      orders.users_id,
+      orderDetails.products_id AS product_id,
+      products.title AS product_title,
+      products.ref AS product_ref,
+      orderDetails.price AS product_price,
+      orderDetails.quantity AS product_quantity
       FROM orders
-      JOIN users ON orders.users_id = users.id
+      JOIN orderDetails ON orderDetails.orders_id = orders.id
+      JOIN products ON orderDetails.products_id = products.id
       WHERE orders.users_id = ?
       `;
       const response = await pool.execute(query, [userId]);
@@ -65,7 +94,7 @@ class Orders {
     try {
       const query = `
       UPDATE orders
-      SET ref = ?, productsQuantity = ?, totalPrice = ?, users_id = ?
+      SET ref = ?, productsQuantity = ?, totalPrice = ?, users_id = ?, status = ?
       WHERE id = ?
       `;
       const response = await pool.execute(query, body);

@@ -8,7 +8,7 @@ class Products {
       price, ref, quantityInStock, categories_id, categories.label AS categories_name
       FROM products
       JOIN categories ON products.categories_id = categories.id
-      ORDER BY products.id
+      ORDER BY products.id DESC
       `;
       const response = await pool.query(query);
       return response[0];

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
+import generateRef from "../middlewares/generateRef.js";
 import { allProducts, productsById, addProducts, editProducts, deleteProducts } from "../controllers/products.controller.js";
 
 const router = Router();
@@ -11,7 +12,7 @@ router.get("/", allProducts);
 router.get("/:id", productsById);
 
 // Ajout d'un produit
-router.post("/", adminRequired, addProducts);
+router.post("/", adminRequired, generateRef, addProducts);
 
 // Modification d'un produit
 router.patch("/:id", adminRequired, editProducts);
