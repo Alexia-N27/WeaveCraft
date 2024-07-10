@@ -4,8 +4,13 @@ class OrderDetails {
   static async getAllOrderDetails() {
     try {
       const query = `
-      SELECT orderDetails.id, orders_id, products_id, quantity, price,
-      orders.date, orders.ref, orders.productsQuantity, orders.totalPrice
+      SELECT orderDetails.id AS orderDetails_id,
+      orders_id AS order_id,
+      orders.date AS order_date,
+      orders.ref AS order_ref,
+      products_id,
+      price,
+      quantity
       FROM orderDetails
       JOIN orders ON orderDetails.orders_id = orders.id
       `;
@@ -19,8 +24,13 @@ class OrderDetails {
   static async getAllOrderDetailsById(id) {
     try {
       const query = `
-      SELECT orderDetails.id, orders_id, products_id, quantity, price,
-      orders.date, orders.ref, orders.productsQuantity, orders.totalPrice
+      SELECT orderDetails.id AS orderDetails_id,
+      orders_id AS order_id,
+      orders.date AS order_date,
+      orders.ref AS order_ref,
+      products_id,
+      price,
+      quantity
       FROM orderDetails
       JOIN orders ON orderDetails.orders_id = orders.id
       WHERE orderDetails.id = ?

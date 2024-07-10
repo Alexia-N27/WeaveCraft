@@ -76,9 +76,9 @@ const addOrders = async (req, res) => {
 // Modification d'une commande
 const editOrders = async (req, res) => {
   try {
-    const { ref, productsQuantity, totalPrice, users_id } = req.body;
+    const { ref, productsQuantity, totalPrice, users_id, status } = req.body;
 
-    const orderData = [ref, productsQuantity, totalPrice, users_id, req.params.id];
+    const orderData = [ref, productsQuantity, totalPrice, users_id, status, req.params.id];
 
     const response = await Orders.patchEditOrders(orderData);
 

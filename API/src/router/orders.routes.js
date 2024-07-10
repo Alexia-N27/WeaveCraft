@@ -1,6 +1,7 @@
 import { Router } from "express";
 import isConnected from "../middlewares/isConnected.js";
 import adminRequired from "../middlewares/adminRequired.js";
+import generateRef from "../middlewares/generateRef.js";
 import { allOrders, ordersById, ordersByUser, addOrders, editOrders, deleteOrders } from "../controllers/orders.controller.js";
 
 const router = Router();
@@ -15,7 +16,7 @@ router.get("/profil", isConnected, ordersByUser);
 router.get("/admin/:id", adminRequired, ordersById);
 
 // Ajout d'une commande
-router.post("/", isConnected, addOrders);
+router.post("/", isConnected, generateRef, addOrders);
 
 // Modification d'une commande
 router.patch("/:id", adminRequired, editOrders);
