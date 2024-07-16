@@ -2,7 +2,7 @@ import "dotenv/config";
 import { createRequire } from "module";
 import express from "express";
 import session from "express-session";
-// cors
+import cors from "cors";
 
 import pool from "./config/db.js";
 import router from "./router/index.routes.js";
@@ -12,8 +12,13 @@ const MySQLStore = require("express-mysql-session")(session);
 
 const app = express();
 
-// cors
 
+const corsOptions = cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+})
+
+app.use(corsOptions);
 
 
 const sessionStore = new MySQLStore(
@@ -41,7 +46,6 @@ const newSession = session({
   rolling: true,
 });
 
-// cors
 
 app.use(newSession);
 
