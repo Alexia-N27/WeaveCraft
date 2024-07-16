@@ -1,9 +1,9 @@
+import UserRouter from "./routers/UserRouter";
 
 function App() {
-
   return (
-    <main>Hello World !</main>
-  )
+      <UserRouter />
+  );
 }
 
-export default App
+export default App;
