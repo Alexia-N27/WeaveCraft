@@ -5,32 +5,36 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
 
     try {
-      const response = await fetch('http://localhost:9000/api/v1/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:9000/api/v1/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: 'include',
+        credentials: "include",
       });
 
+      const data = await response.json();
+      console.log("Response data:", data);
       if (response.ok) {
-        const data = await response.json();
         console.log("Connexion réussie:", data);
-        navigate("/");
+        if (data.user.isAdmin) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Erreur de connexion");
+        setError(data.message || "Erreur de connexion");
       }
     } catch (error) {
+      console.error("Erreur de connexion:", error);
       setError("Erreur de connexion");
     }
   }
@@ -40,9 +44,10 @@ function Login() {
     <h1>Bienvenue sur la page de connexion</h1>
     {error && <p style={{ color: 'red' }}>{error}</p>}
     <form onSubmit={handleSubmit}>
-      <label>Email</label>
+      <label htmlFor="email">Email</label>
       <input
         type="email"
+        id="email"
         name="email"
         placeholder="Entrer votre email"
         aria-label="Entrer votre email"
@@ -51,9 +56,10 @@ function Login() {
         required
       />
 
-      <label>Mot de passe</label>
+      <label htmlFor="password">Mot de passe</label>
       <input
         type="password"
+        id="password"
         name="password"
         placeholder="Entrer votre mot de passe"
         aria-label="Entrer votre mot de passe"
