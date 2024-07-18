@@ -1,6 +1,15 @@
 import Auth from "../models/Auth.js";
 import bcrypt from "bcrypt";
 
+// Vérification de connexion
+const checkAuth = (req, res) => {
+  if (req.session.user) {
+    res.json({ user: req.session.user });
+  } else {
+    res.status(401).json({ message: "Non autorisé" });
+  }
+};
+
 // Inscription des utilisateurs
 const registerUsers = async (req, res) => {
   try {
@@ -58,6 +67,7 @@ const loginUsers = async (req, res) => {
       firstname: user[0].firstname,
       email: user[0].email,
       roles_id: user[0].roles_id,
+      isAdmin: user[0].roles_id === 1,
     };
 
     req.session.user = infoUser;
@@ -171,4 +181,4 @@ const deleteUsers = async (req, res) => {
 };
 
 
-export { allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUsers, editUsers, deleteUsers };
+export { checkAuth, allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUsers, editUsers, deleteUsers };

@@ -1,9 +1,12 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
 import isConnected from "../middlewares/isConnected.js";
-import { allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUsers, editUsers, deleteUsers } from "../controllers/auth.controller.js";
+import { checkAuth, allUsers, usersById, usersProfil, registerUsers, loginUsers, logoutUsers, editUsers, deleteUsers } from "../controllers/auth.controller.js";
 
 const router = Router();
+
+// Route pour vérifier l'authentification de l'utilisateur
+router.get("/", checkAuth);
 
 // Affichage de tout les utilisateur
 router.get("/users", adminRequired, allUsers);
