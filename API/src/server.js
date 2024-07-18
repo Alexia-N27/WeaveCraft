@@ -53,8 +53,6 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-// middleware pour afficher les informations de session quand une requête est reçu
-
 app.use(router);
 
 app.listen(process.env.LOCAL_PORT, () => {
