@@ -7,7 +7,7 @@ function Router() {
   console.log("Admin Router");
   return (
     <Routes>
-      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
