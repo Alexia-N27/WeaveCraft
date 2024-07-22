@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../hooks/UseUser";
 
 
 function Login() {
@@ -7,6 +8,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,8 +27,9 @@ function Login() {
       console.log("Response data:", data);
       if (response.ok) {
         console.log("Connexion réussie:", data);
+        setUser(data.user);
         if (data.user.isAdmin) {
-          navigate("/admin");
+          navigate("/admin/dashboard");
         } else {
           navigate("/");
         }
