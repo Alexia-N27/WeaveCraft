@@ -16,6 +16,16 @@ header {
     align-items: center;
     padding: 1rem 0 1rem 0;
 
+    .container-header-logo {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      .header-logo {
+        width: 6rem;
+      }
+    }
+
     .nav-icons {
       // border: solid 2px blue;
       display: flex;

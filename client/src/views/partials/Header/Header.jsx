@@ -5,6 +5,7 @@ import { faBars, faUser, faCartShopping, faXmark, faMagnifyingGlass } from "@for
 
 import useUser from "../../../hooks/UseUser";
 
+import logo from "../../../assets/images/WeaveCraft.png";
 import "./_header.scss";
 
 function Header() {
@@ -47,9 +48,15 @@ function Header() {
           <FontAwesomeIcon icon={faBars} />
         </button>
 
-        <h1>
-          <Link to={"/"}>WeaveCraft</Link>
-        </h1>
+          <h1 className={"container-header-logo"}>
+            <Link to={"/"}>
+              <img
+                src={logo}
+                alt="Logo de la boutique WeaveCraft"
+                className={"header-logo"}
+              />
+            </Link>
+          </h1>
 
         <div className="nav-icons">
           <NavLink to={user ? "/profile" : "/login"}>

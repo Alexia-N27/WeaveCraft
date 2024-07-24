@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Header from "../views/partials/Header/Header.jsx";
+import Footer from "../views/partials/Footer/Footer.jsx";
 
 import HomePage from "../views/user/HomePage";
 import Login from "../views/auth/Login";
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/profile" element={<UserProfile />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    <Footer />
     </>
   )
 }

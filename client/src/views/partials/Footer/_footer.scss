@@ -1,0 +1,25 @@
+@import "../../../assets/styles/scss/variables";
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $color-bg-secondary;
+
+  .footer-logo {
+    width: 8rem;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0 2rem 0;
+
+    a {
+      margin: 0.8rem 0 0.8rem 0;
+    }
+  }
+}
