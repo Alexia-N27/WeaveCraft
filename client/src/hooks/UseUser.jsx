@@ -15,7 +15,7 @@ const useUser = () => {
         );
 
         if(response.status === 401) {
-          console.log("Non autorisé");
+          // console.log("Non autorisé");
           return;
         }
 
