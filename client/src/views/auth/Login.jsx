@@ -45,7 +45,7 @@ function Login() {
   return(
     <main>
     <h1>Bienvenue sur la page de connexion</h1>
-    {error && <p style={{ color: 'red' }}>{error}</p>}
+    {error && <p>{error}</p>}
     <form onSubmit={handleSubmit}>
       <label htmlFor="email">Email</label>
       <input

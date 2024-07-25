@@ -29,7 +29,25 @@ function Categories() {
 
   async function handleAddCategory(e) {
     e.preventDefault();
-    // Ajouter une validation
+
+    // Validation vide
+    if(!newCategoryLabel.trim()) {
+      alert("Le champ du nom de la catégorie ne peut pas être vide");
+      return;
+    }
+
+    // Validation de longueur minimal
+    if(newCategoryLabel.trim().length < 4) {
+      alert("Le nom de la catégorie doit contenir au moins 4 caractères");
+      return;
+    }
+
+    // validation de format
+    const labelPattern = /^[a-zA-Z\s]+$/;
+    if(!labelPattern.test(newCategoryLabel.trim())) {
+      alert("")
+    }
+
     try {
       const response = await fetch(
         "http://localhost:9000/api/v1/categories",
@@ -103,6 +121,7 @@ function Categories() {
               Nom de la catégorie :
               <input
                 type="text"
+                id="label"
                 value={newCategoryLabel}
                 onChange={(e) => setNewCategoryLabel(e.target.value)}
               />
