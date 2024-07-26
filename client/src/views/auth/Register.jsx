@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import useUser from "../../hooks/UseUser";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -9,6 +11,9 @@ function Register() {
   });
   const [messageValidateRegister, setMessageValidateRegister] = useState("");
   const [error, setError] = useState(null);
+  const [redirect, setRedirect] = useState(false);
+
+  const { setUser } = useUser();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +24,7 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(e);
+    e.preventDefault();
     console.log(formData);
 
     try {
@@ -36,15 +41,31 @@ function Register() {
       );
 
       if(response.ok) {
-        setError(null);
-        setMessageValidateRegister("Vous êtes bien inscrit");
+        const loginResponse = await fetch (
+          "http://localhost:9000/api/v1/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              password: formData.password,
+            }),
+            credentials: "include",
+          }
+        );
 
-        setTimeout(() => {
-          window.location.href = "/profile";
-        }, 1500);
-
+        if (loginResponse.ok) {
+          const data = await loginResponse.json();
+          setUser(data.user);
+          setError(null);
+          setMessageValidateRegister("Inscription et connexion réussie");
+          setRedirect(true);
+        } else {
+          throw new Error("Problème lors de la connexion");
+        }
       } else {
-        setError("Problème lors de l'inscription");
         throw new Error("Problème lors de l'inscription");
       }
     } catch (error) {
@@ -53,6 +74,9 @@ function Register() {
     }
   };
 
+  if (redirect) {
+    return <Navigate to="/profile" />;
+  }
 
 
   return (

@@ -6,6 +6,6 @@ import "./assets/styles/scss/main.scss";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <App />
+      <App />
   </BrowserRouter>
 );
