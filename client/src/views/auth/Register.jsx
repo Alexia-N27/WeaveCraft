@@ -40,7 +40,7 @@ function Register() {
         setMessageValidateRegister("Vous êtes bien inscrit");
 
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/profile";
         }, 1500);
 
       } else {
@@ -48,8 +48,8 @@ function Register() {
         throw new Error("Problème lors de l'inscription");
       }
     } catch (error) {
-      console.log("Erreur lors l'inscription", error);
-      setError("Problème lors de l'inscription");
+      console.log("Erreur de réseau", error);
+      setError(`Erreur de réseau: ${error.message}`);
     }
   };
 
@@ -57,60 +57,63 @@ function Register() {
 
   return (
     <main>
-    <h1>Bienvenue sur la page d&apos;inscription</h1>
-    <form>
-      <label htmlFor="firstname"> Prénom
-        <input
-          type="text"
-          name="firstname"
-          id="firstname"
-          placeholder="Entrer votre prénom"
-          aria-label="Entrer votre prénom"
-          value={formData.firstname}
-          onChange={handleChange}
-        />
-      </label>
+      <h1>Bienvenue sur la page d&apos;inscription</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="firstname"> Prénom
+          <input
+            type="text"
+            name="firstname"
+            id="firstname"
+            placeholder="Entrer votre prénom"
+            aria-label="Entrer votre prénom"
+            value={formData.firstname}
+            onChange={handleChange}
+          />
+        </label>
 
-      <label htmlFor="lastname"> Nom
-        <input
-          type="text"
-          name="lastname"
-          id="lastname"
-          placeholder="Nom"
-          aria-label="Nom"
-          value={formData.lastname}
-          onChange={handleChange}
-        />
-      </label>
+        <label htmlFor="lastname"> Nom
+          <input
+            type="text"
+            name="lastname"
+            id="lastname"
+            placeholder="Entrer votre nom"
+            aria-label="Entrer votre nom"
+            value={formData.lastname}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <label htmlFor="email"> Email
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="email"
-          aria-label="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </label>
+        <label htmlFor="email"> Email
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="email@gmail.com"
+            aria-label="Ajoutez un email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <label htmlFor="password"> Mot de passe
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Mot de passe"
-          aria-label="Mot de passe"
-          value={formData.password}
-          onChange={handleChange}
-        />
-      </label>
+        <label htmlFor="password"> Mot de passe
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Entrer votre mot de passe"
+            aria-label="Entrer votre mot de passe"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <button type="submit" onClick={handleSubmit}>Valider</button>
-    </form>
-    {error && <p>{error}</p>}
-    {messageValidateRegister && <p>{messageValidateRegister}</p>}
+        <button type="submit">Valider</button>
+      </form>
+      {error && <p>{error}</p>}
+      {messageValidateRegister && <p>{messageValidateRegister}</p>}
     </main>
   );
 }
