@@ -1,12 +1,12 @@
 import UserRouter from "./routers/UserRouter";
 import AdminRouter from "./routers/AdminRouter";
 
-import useUser from "./hooks/UseUser";
+import useSession from "./hooks/useSession";
 
 function App() {
-  const { user, isLoading } = useUser();
+  const { session } = useSession();
 
-  if (isLoading) {
+  if (!session) {
     return (
       <>
         <p>Chargement...</p>
@@ -14,7 +14,7 @@ function App() {
     );
   }
 
-  const isAdmin = user && user.isAdmin;
+  const isAdmin = session?.user.roles_id === 1 ;
 
   if (isAdmin) {
     return <AdminRouter />;

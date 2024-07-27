@@ -1,5 +1,7 @@
 import { useState } from "react";
-import useUser from "../../hooks/UseUser";
+import { useNavigate } from "react-router-dom";
+
+import useSession from "../../hooks/useSession";
 
 function Login() {
   const [formData, setFromData] = useState({
@@ -8,8 +10,11 @@ function Login() {
   });
   const [MessageSuccess, setMessageSuccess] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const { user, isLoading, setUser } = useUser();
+  const { session, setSession } = useSession();
+  console.log(session);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,14 +43,14 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user);
+        setSession(data);
         setMessageSuccess("Connexion réussie !");
         setError(null);
-
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1500);
-
+        if (data.user.roles_id == 1) {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         setError("Erreur lors de la connexion");
         throw new Error("Erreur lors de la connexion");
@@ -55,6 +60,7 @@ function Login() {
       setError(`Erreur de réseau: ${error.message}`);
     }
   };
+
 
   return (
     <main>
@@ -86,13 +92,13 @@ function Login() {
           />
         </label>
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading? "Chargement..." : "Se connecter"}
+        <button type="submit">
+          Se connecter
         </button>
       </form>
       {error && <p>{error}</p>}
       {MessageSuccess && <p>{MessageSuccess}</p>}
-      {user && <p>Bienvenue, {user.firstname}!</p>}
+      {session?.user.firstname && <p>Bienvenue, {session?.user.firstname}!</p>}
     </main>
   )
 }

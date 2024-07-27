@@ -3,15 +3,16 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faCartShopping, faXmark, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
-import useUser from "../../../hooks/UseUser";
+import useSession from "../../../hooks/useSession";
 
 import logo from "../../../assets/images/WeaveCraft.png";
 import "./_header.scss";
 
 function Header() {
-  const { user, setUser } = useUser();
+  const { session, setSession } = useSession();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
+  console.log(session);
 
   async function handleLogout() {
     try {
@@ -23,7 +24,7 @@ function Header() {
         }
       );
       if (response.ok) {
-        setUser(null);
+        setSession(null);
         navigate("/");
       } else {
         console.log("Erreur lors de la déconnexion.")
@@ -59,7 +60,7 @@ function Header() {
           </h1>
 
         <div className="nav-icons">
-          <NavLink to={user ? "/profile" : "/login"}>
+          <NavLink to={session?.user.email ? "/profile" : "/login"}>
             <FontAwesomeIcon icon={faUser} />
           </NavLink>
           <NavLink>
@@ -85,7 +86,7 @@ function Header() {
           <Link to={"/"} onClick={closeMenu}>Contact</Link>
 
           {/* Utilisateur connecté, affichage btn déconnexion */}
-          {user && (
+          {session?.user.email && (
             <button onClick={() => { handleLogout(); closeMenu(); }}>
               Déconnexion
             </button>
