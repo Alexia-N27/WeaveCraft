@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import useUser from "../../hooks/UseUser";
+import { useNavigate } from "react-router-dom";
+
+import useSession from "../../hooks/useSession";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,9 +12,9 @@ function Register() {
   });
   const [messageValidateRegister, setMessageValidateRegister] = useState("");
   const [error, setError] = useState(null);
-  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
 
-  const { setUser } = useUser();
+  const { setSession } = useSession();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,43 +42,21 @@ function Register() {
       );
 
       if(response.ok) {
-        const loginResponse = await fetch (
-          "http://localhost:9000/api/v1/auth/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: formData.email,
-              password: formData.password,
-            }),
-            credentials: "include",
-          }
-        );
+        const data = await response.json();
+        console.log(data);
+        setSession(data);
+        setError(null);
+        setMessageValidateRegister("Inscription et connexion réussie");
+        navigate("/");
 
-        if (loginResponse.ok) {
-          const data = await loginResponse.json();
-          setUser(data.user);
-          setError(null);
-          setMessageValidateRegister("Inscription et connexion réussie");
-          setRedirect(true);
-        } else {
-          throw new Error("Problème lors de la connexion");
-        }
       } else {
-        throw new Error("Problème lors de l'inscription");
+        throw new Error("Problème lors de la connexion");
       }
     } catch (error) {
       console.log("Erreur de réseau", error);
       setError(`Erreur de réseau: ${error.message}`);
     }
   };
-
-  if (redirect) {
-    return <Navigate to="/profile" />;
-  }
-
 
   return (
     <main>
