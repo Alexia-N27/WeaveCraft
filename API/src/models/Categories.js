@@ -3,7 +3,7 @@ import pool from "../config/db.js";
 class Categories {
   static async getAllCategories() {
     try {
-      const query = `SELECT label FROM categories`;
+      const query = `SELECT id, label FROM categories`;
       const response = await pool.query(query);
       return response[0];
     } catch (error) {
