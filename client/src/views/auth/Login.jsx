@@ -13,7 +13,6 @@ function Login() {
   const navigate = useNavigate();
 
   const { session, setSession } = useSession();
-  console.log(session);
 
 
   const handleInputChange = (e) => {
@@ -34,7 +33,7 @@ function Login() {
         {
           method: "POST",
           headers: {
-            "content-Type" : "application/json",
+            "Content-Type" : "application/json",
           },
           body: JSON.stringify(formData),
           credentials: "include",

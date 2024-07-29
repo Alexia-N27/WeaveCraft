@@ -12,7 +12,6 @@ function Header() {
   const { session, setSession } = useSession();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
-  console.log(session);
 
   async function handleLogout() {
     try {

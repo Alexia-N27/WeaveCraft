@@ -11,6 +11,7 @@ export const SessionContext = createContext({
 
 const SessionProvider = ({children}) => {
   const [session, setSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAuth() {
@@ -26,10 +27,9 @@ const SessionProvider = ({children}) => {
           }
         );
 
-        console.log(response);
-
         if (!response.ok) {
           console.log("Non autorisé");
+          setIsLoading(false)
           return;
         }
 
@@ -39,13 +39,15 @@ const SessionProvider = ({children}) => {
 
       } catch (error) {
         console.log("Erreur de reseau", error)
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchAuth();
   },[]);
 
   return (
-    <SessionContext.Provider value={{session, setSession}}>
+    <SessionContext.Provider value={{session, setSession, isLoading, setIsLoading}}>
       {children}
     </SessionContext.Provider>
   );
