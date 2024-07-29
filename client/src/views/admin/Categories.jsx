@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function Categories() {
   const [categories, setCategories] = useState(null);
   const [newCategoryLabel, setNewCategoryLabel] = useState("");
   const [shouldRefreshCategories, setShouldRefreshCategories] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState(null);
+  const [editingCategoryLabel, setEditingCategoryLabel] = useState("");
 
   useEffect(() => {
     document.title = "Back Office | Categories";
@@ -22,11 +27,13 @@ function Categories() {
       if(response.ok) {
         const data = await response.json();
         setCategories(data.response);
+        console.log(data.response);
       }
     }
     fetchCategories();
   }, [shouldRefreshCategories]);
 
+  // Ajout de catégorie
   async function handleAddCategory(e) {
     e.preventDefault();
 
@@ -72,6 +79,60 @@ function Categories() {
     }
   }
 
+  // Modification de catégorie
+  async function handleEditCategory(e) {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/v1/categories/${editingCategoryId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type" : "application/json",
+          },
+          body: JSON.stringify({ label: editingCategoryLabel }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        setEditingCategoryId(null);
+        setEditingCategoryLabel("");
+        setShouldRefreshCategories(prev => !prev);
+      } else {
+        console.log("Erreur lors de la modification de la catégorie");
+      }
+
+    } catch (error) {
+      console.log("Erreur:", error);
+    }
+
+  }
+
+  // Suppression de catégorie
+  async function handleDelete(e, id) {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/v1/categories/${id}` ,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        setShouldRefreshCategories(prev => !prev);
+      }
+    } catch (error) {
+      console.log("Erreur lors de la suppression de la catégorie", error);
+    }
+  }
+
+  function handleEditClick(category) {
+    setEditingCategoryId(category.id);
+    setEditingCategoryLabel(category.label);
+  }
+
   if(!categories) {
     return (
       <main>
@@ -107,14 +168,19 @@ function Categories() {
                   <td>{category.id}</td>
                   <td>{category.label}</td>
                   <td>
-                    <Link to={"/edit/" + category.id}>Modifier</Link>
-                    <button>Supprimer</button>
+                    <button onClick={() => handleEditClick(category)}>
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                    <button onClick={(e) => handleDelete(e, category.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+
         <h3>Ajouter une nouvelle categorie</h3>
         <form onSubmit={handleAddCategory}>
             <label htmlFor="label">
@@ -128,6 +194,27 @@ function Categories() {
             </label>
             <button type="submit">Ajouter</button>
         </form>
+
+        {editingCategoryId && (
+          <>
+            <h3>Modifier une catégorie</h3>
+            <form onSubmit={handleEditCategory}>
+              <label htmlFor="editLabel">
+                Nom de la catégorie :
+                <input
+                  type="text"
+                  id="editLabel"
+                  value={editingCategoryLabel}
+                  onChange={(e) => setEditingCategoryLabel(e.target.value)}
+                />
+              </label>
+              <button type="submit">Modifier</button>
+              <button type="button" onClick={() => setEditingCategoryId(null)}>
+                Annuler
+              </button>
+            </form>
+          </>
+        )}
       </section>
     </main>
   )
