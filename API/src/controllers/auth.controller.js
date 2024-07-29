@@ -3,11 +3,7 @@ import bcrypt from "bcrypt";
 
 // Vérification de connexion
 const checkAuth = (req, res) => {
-  if (req.session.user) {
-    res.json({ user: req.session.user });
-  } else {
-    res.status(401).json({ message: "Non autorisé" });
-  }
+    return res.status(200).json({ user: req.session.user || {} });
 };
 
 // Inscription des utilisateurs
@@ -38,7 +34,17 @@ const registerUsers = async (req, res) => {
         .json({ msg: "Erreur lors de l'inscription", error: response.error.message });
     }
 
-    res.status(201).json({ msg: "Inscription réussie", response });
+    const newSession = {
+      id: req.body.id,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      roles_id: 2,
+    };
+
+    req.session.user = newSession;
+
+    res.status(201).json({ user: newSession });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
@@ -71,7 +77,7 @@ const loginUsers = async (req, res) => {
     };
 
     req.session.user = infoUser;
-    res.status(200).json({ msg: "Connexion réussie !", user: infoUser });
+    res.status(200).json({ user: infoUser });
   } catch (error) {
     res.status(500).json({ msg: "Erreur lors de la connexion.", error: error.message });
   }
