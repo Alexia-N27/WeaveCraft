@@ -43,7 +43,6 @@ function Register() {
 
       if(response.ok) {
         const data = await response.json();
-        console.log(data);
         setSession(data);
         setError(null);
         setMessageValidateRegister("Inscription et connexion réussie");
@@ -62,23 +61,24 @@ function Register() {
     <main>
       <h1>Bienvenue sur la page d&apos;inscription</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="firstname"> Prénom
+        <label>
+          Prénom
           <input
             type="text"
             name="firstname"
-            id="firstname"
             placeholder="Entrer votre prénom"
             aria-label="Entrer votre prénom"
             value={formData.firstname}
             onChange={handleChange}
+            required
           />
         </label>
 
-        <label htmlFor="lastname"> Nom
+        <label>
+          Nom
           <input
             type="text"
             name="lastname"
-            id="lastname"
             placeholder="Entrer votre nom"
             aria-label="Entrer votre nom"
             value={formData.lastname}
@@ -87,11 +87,11 @@ function Register() {
           />
         </label>
 
-        <label htmlFor="email"> Email
+        <label>
+          Email
           <input
             type="email"
             name="email"
-            id="email"
             placeholder="email@gmail.com"
             aria-label="Ajoutez un email"
             value={formData.email}
@@ -100,11 +100,11 @@ function Register() {
           />
         </label>
 
-        <label htmlFor="password"> Mot de passe
+        <label>
+          Mot de passe
           <input
             type="password"
             name="password"
-            id="password"
             placeholder="Entrer votre mot de passe"
             aria-label="Entrer votre mot de passe"
             value={formData.password}
