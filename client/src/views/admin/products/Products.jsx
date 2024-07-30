@@ -1,0 +1,136 @@
+import { useEffect, useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
+import "./products.scss";
+
+function Products() {
+  const [products, setProducts] = useState(null);
+  const [shouldRefreshProducts, setShouldRefreshProducts] = useState(false);
+
+  useEffect(() => {
+    document.title = "Back Office | Products";
+    async function fetchProducts() {
+      try {
+        const response = await fetch(
+          "http://localhost:9000/api/v1/products",
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!response) {
+          console.log("Aucun produits trouvé");
+          return;
+        }
+
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.response);
+          console.log(data.response);
+        }
+      } catch (error) {
+        console.log("Erreur", error);
+      }
+    }
+    fetchProducts();
+  }, [shouldRefreshProducts]);
+
+  // Ajout d'un produit
+
+  // Modification d'un produit
+
+  // Suppression d'un produit
+  async function handleDelete(e, id) {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/v1/products/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      console.log(response);
+
+      if (!response) {
+        console.log("Erreur lors de la suppression");
+        return;
+      }
+
+      if (response.ok) {
+        setShouldRefreshProducts(prev => !prev);
+      }
+    } catch (error) {
+      console.log("Erreur:", error);
+    }
+  }
+
+  if(!products) {
+    return (
+      <main>
+        <p>Chargement ...</p>
+      </main>
+    )
+  }
+
+  if(products.length === 0) {
+    return (
+      <main>
+        <p>Pas de produits trouvée</p>
+      </main>
+    )
+  }
+
+  return (
+    <main>
+      <h1>Bienvenue sur la page produits</h1>
+      <section className="list-products">
+        {/* Table products */}
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>Titre</th>
+              <th>Référence</th>
+              <th>Quantitée en stock</th>
+              <th>Prix</th>
+              <th>Categorie</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => {
+              return (
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  <td>{product.title}</td>
+                  <td>{product.ref}</td>
+                  <td>{product.quantityInStock}</td>
+                  <td>{product.price}</td>
+                  <td>{product.categories_name}</td>
+                  {/* Actions */}
+                  <td>
+                    <button>
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                    <button onClick={(e) => handleDelete(e, product.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+          {/* Ajouter un nouveau produit */}
+      </section>
+    </main>
+  )
+}
+
+export default Products;

@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+import "./categories.scss";
+
 function Categories() {
   const [categories, setCategories] = useState(null);
   const [newCategoryLabel, setNewCategoryLabel] = useState("");
@@ -27,7 +29,6 @@ function Categories() {
       if(response.ok) {
         const data = await response.json();
         setCategories(data.response);
-        console.log(data.response);
       }
     }
     fetchCategories();
@@ -136,7 +137,7 @@ function Categories() {
   if(!categories) {
     return (
       <main>
-        <p>Loading...</p>
+        <p>Chargement...</p>
       </main>
     )
   }
@@ -153,6 +154,7 @@ function Categories() {
     <main>
       <h1>Liste des categories</h1>
       <section>
+        {/* Table categories */}
         <table>
           <thead>
             <tr>
@@ -167,6 +169,7 @@ function Categories() {
                 <tr key={category.id}>
                   <td>{category.id}</td>
                   <td>{category.label}</td>
+                  {/* Actions */}
                   <td>
                     <button onClick={() => handleEditClick(category)}>
                       <FontAwesomeIcon icon={faPenToSquare} />
@@ -183,13 +186,13 @@ function Categories() {
 
         <h3>Ajouter une nouvelle categorie</h3>
         <form onSubmit={handleAddCategory}>
-            <label htmlFor="label">
-              Nom de la catégorie :
+            <label>
+              Nom de la catégorie
               <input
                 type="text"
-                id="label"
                 value={newCategoryLabel}
                 onChange={(e) => setNewCategoryLabel(e.target.value)}
+                required
               />
             </label>
             <button type="submit">Ajouter</button>
@@ -199,13 +202,13 @@ function Categories() {
           <>
             <h3>Modifier une catégorie</h3>
             <form onSubmit={handleEditCategory}>
-              <label htmlFor="editLabel">
-                Nom de la catégorie :
+              <label>
+                Nom de la catégorie
                 <input
                   type="text"
-                  id="editLabel"
                   value={editingCategoryLabel}
                   onChange={(e) => setEditingCategoryLabel(e.target.value)}
+                  required
                 />
               </label>
               <button type="submit">Modifier</button>

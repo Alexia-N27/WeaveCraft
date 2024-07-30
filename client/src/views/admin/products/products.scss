@@ -1,0 +1,22 @@
+@import "../../../assets/styles/scss/variables";
+
+.list-products {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+
+    thead {
+      background-color: $color-bg-secondary;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: center;
+      border: 1px solid $color-text;
+    }
+  }
+}
