@@ -110,6 +110,11 @@ function Categories() {
 
   }
 
+  function handleEditClick(category) {
+    setEditingCategoryId(category.id);
+    setEditingCategoryLabel(category.label);
+  }
+
   // Suppression de catégorie
   async function handleDelete(e, id) {
     e.preventDefault();
@@ -127,11 +132,6 @@ function Categories() {
     } catch (error) {
       console.log("Erreur lors de la suppression de la catégorie", error);
     }
-  }
-
-  function handleEditClick(category) {
-    setEditingCategoryId(category.id);
-    setEditingCategoryLabel(category.label);
   }
 
   if(!categories) {

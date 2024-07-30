@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import "./products.scss";
-
+// Ajout de pop up warning pour suppression.
 function Products() {
   const [products, setProducts] = useState(null);
   const [shouldRefreshProducts, setShouldRefreshProducts] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Back Office | Products";
@@ -37,10 +40,6 @@ function Products() {
     }
     fetchProducts();
   }, [shouldRefreshProducts]);
-
-  // Ajout d'un produit
-
-  // Modification d'un produit
 
   // Suppression d'un produit
   async function handleDelete(e, id) {
@@ -89,6 +88,7 @@ function Products() {
     <main>
       <h1>Bienvenue sur la page produits</h1>
       <section className="list-products">
+        <Link to="/admin/addproduct">Ajouter un nouveau produit</Link>
         {/* Table products */}
         <table>
           <thead>
@@ -114,7 +114,7 @@ function Products() {
                   <td>{product.categories_name}</td>
                   {/* Actions */}
                   <td>
-                    <button>
+                    <button onClick={() => navigate(`/admin/editproduct/${product.id}`, { state: { product } })}>
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                     <button onClick={(e) => handleDelete(e, product.id)}>
@@ -126,8 +126,6 @@ function Products() {
             })}
           </tbody>
         </table>
-
-          {/* Ajouter un nouveau produit */}
       </section>
     </main>
   )

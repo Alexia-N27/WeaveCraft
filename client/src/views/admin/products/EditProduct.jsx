@@ -1,33 +1,35 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
-import "./addProduct.scss";
+import "./editProduct.scss";
 
-function AddProduct() {
-  document.title = "Back Office | Ajout de produit"
+function EditProduct() {
+  document.title = "Back Office | Modification de produit"
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const product = location.state.product || {};
 
   const [formData, setFormData] = useState({
-    title: "",
-    undertitle: "",
-    description: "",
-    picture: "",
-    alt: "",
-    price: "",
-    quantityInStock: "",
-    "categories_id": "",
+    title: product.title || "",
+    undertitle: product.undertitle || "",
+    description: product.description || "",
+    picture: product.picture || "",
+    alt: product.alt || "",
+    price: product.price || 0,
+    ref: product.ref || "",
+    quantityInStock: product.quantityInStock || 0,
+    "categories_id": product.categories_id || 0,
   });
 
-  async function handleSubmit(e) {
+  async function handleEditProduct(e) {
     e.preventDefault();
-    console.log(formData);
-
+    console.log("Form Data:", formData);
     try {
       const response = await fetch(
-        "http://localhost:9000/api/v1/products/",
+        `http://localhost:9000/api/v1/products/${product.id}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type" : "application/json",
           },
@@ -36,10 +38,13 @@ function AddProduct() {
         }
       );
 
+      const responseData = await response.json();
+      console.log("Server Response:", responseData);
+
       if (response.ok) {
-        navigate("/admin/products");
+        navigate("/admin/products")
       } else {
-        console.log("Erreur lors de l'ajout du produit");
+        console.log("Erreur lors de la modification du produit", responseData.msg);
       }
     } catch (error) {
       console.log("Erreur:", error);
@@ -48,16 +53,16 @@ function AddProduct() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   }
 
   return (
     <main>
-      <h1>Ajouter un nouveau produit</h1>
-      <form className="add-product" onSubmit={handleSubmit}>
+      <h1>Bienvenue sur la modification de produit</h1>
+      <form className="edit-product" onSubmit={handleEditProduct}>
         <label>
           Titre
           <input
@@ -67,7 +72,6 @@ function AddProduct() {
             aria-label="Titre du produit"
             value={formData.title}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -80,7 +84,6 @@ function AddProduct() {
             aria-label="Sous-titre du produit"
             value={formData.undertitle}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -93,7 +96,6 @@ function AddProduct() {
             aria-label="Description du produit"
             value={formData.description}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -107,7 +109,6 @@ function AddProduct() {
             aria-label="Ajouter une image"
             value={formData.picture}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -120,7 +121,6 @@ function AddProduct() {
             aria-label="Ajouter un alt"
             value={formData.alt}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -133,7 +133,6 @@ function AddProduct() {
             aria-label="Ajouter le prix"
             value={formData.price}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -146,7 +145,6 @@ function AddProduct() {
             aria-label="Quantité en stock"
             value={formData.quantityInStock}
             onChange={handleChange}
-            required
           />
         </label>
 
@@ -159,16 +157,14 @@ function AddProduct() {
             aria-label="Catégorie"
             value={formData["categories_id"]}
             onChange={handleChange}
-            required
           />
         </label>
 
-        <button type="Submit">Ajouter le produit</button>
+        <button type="Submit">Modifier le produit</button>
       </form>
       <Link to="/admin/products">Retour à la page produit</Link>
     </main>
-  );
+  )
 }
 
-
-export default AddProduct;
+export default EditProduct;
