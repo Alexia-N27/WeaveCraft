@@ -33,10 +33,13 @@ class Auth {
   static async getUserById(id) {
     try {
       const query = `
-      SELECT users.id, firstname, lastname, email, password, roles_id,
-      roles.label AS roles_label
+      SELECT users.id, firstname, lastname, email, roles_id,
+      roles.label AS roles_label,
+      addresses.id AS address_id,
+      address_type, street, complement, city, zip_code, country
       FROM users
       JOIN roles ON users.roles_id = roles.id
+      LEFT JOIN addresses ON users.id = addresses.users_id
       WHERE users.id = ?`;
       const response = await pool.execute(query, [id]);
       return response[0];
