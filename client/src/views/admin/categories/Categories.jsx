@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
@@ -218,6 +219,7 @@ function Categories() {
             </form>
           </>
         )}
+        <Link to={"/admin/dashboard"}>Retour au tableau de bord</Link>
       </section>
     </main>
   )

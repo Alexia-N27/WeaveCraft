@@ -8,26 +8,27 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./products.scss";
 // Ajout de pop up warning pour suppression.
 function Products() {
+  document.title = "Back office || Gestion des produits"
   const [products, setProducts] = useState(null);
   const [shouldRefreshProducts, setShouldRefreshProducts] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Back Office | Products";
     async function fetchProducts() {
       try {
         const response = await fetch(
           "http://localhost:9000/api/v1/products",
           {
+            method: "GET",
+            headers: {
+              "Accept" : "application/json"
+            },
             credentials: "include",
           }
         );
 
-        if (!response) {
-          console.log("Aucun produits trouvé");
-          return;
-        }
+        if (!response) return;
 
         if (response.ok) {
           const data = await response.json();
@@ -126,6 +127,7 @@ function Products() {
             })}
           </tbody>
         </table>
+        <Link to={"/admin/dashboard"}>Retour au tableau de bord</Link>
       </section>
     </main>
   )
