@@ -22,8 +22,7 @@ function Categories() {
           credentials: "include",
         }
       );
-      if (response.status === 401) {
-        console.log("Non autorisé");
+      if (!response) {
         return;
       }
       if(response.ok) {
@@ -107,7 +106,6 @@ function Categories() {
     } catch (error) {
       console.log("Erreur:", error);
     }
-
   }
 
   function handleEditClick(category) {
@@ -128,26 +126,28 @@ function Categories() {
       );
       if (response.ok) {
         setShouldRefreshCategories(prev => !prev);
+      } else {
+        console.log("Erreur lors de la suppression de la catégorie");
       }
     } catch (error) {
-      console.log("Erreur lors de la suppression de la catégorie", error);
+      console.log("Erreur:", error);
     }
   }
 
-  if(!categories) {
+  if (!categories) {
     return (
       <main>
         <p>Chargement...</p>
       </main>
-    )
+    );
   }
 
-  if(categories.length === 0) {
+  if (categories.length === 0) {
     return (
       <main>
         <p>Pas de catégories trouvées</p>
       </main>
-    )
+    );
   }
 
   return (
