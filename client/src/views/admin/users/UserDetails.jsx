@@ -78,7 +78,7 @@ function UserDetails() {
         <p><strong>Nom:</strong> {user.lastname}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Rôle:</strong> {user.roles_label}</p>
-        {user.address_id && (
+        {user.address_id ? (
           <>
             <h2>Adresse</h2>
             <p><strong>Type:</strong> {user.address_type}</p>
@@ -87,6 +87,11 @@ function UserDetails() {
             <p><strong>Code Postal:</strong> {user.zip_code}</p>
             <p><strong>Ville:</strong> {user.city}</p>
             <p><strong>Pays:</strong> {user.country}</p>
+          </>
+        ) : (
+          <>
+            <h2>Adresse</h2>
+            <p>Aucune adresse renseignée</p>
           </>
         )}
         <button onClick={() => navigate(`/admin/edituser/${userId}`)}>Modifier</button>
