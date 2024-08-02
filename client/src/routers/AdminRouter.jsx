@@ -24,7 +24,7 @@ function Router() {
       <Route path="/admin/roles" element={<Roles />} />
       <Route path="/admin/users" element={<AdminUsers />} />
       <Route path="/admin/users/:userId" element={<UserDetails />} />
-      <Route path="/admin/edituser/:id" element={<EditUser />} />
+      <Route path="/admin/edituser/:userId" element={<EditUser />} />
       <Route path="/admin/categories" element={<Categories />} />
       <Route path="/admin/products" element={<Products />} />
       <Route path="/admin/addproduct" element={<AddProduct />} />
