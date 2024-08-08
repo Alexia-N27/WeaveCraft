@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useSession from "../../../hooks/useSession";
 
@@ -14,6 +14,7 @@ function EditUser() {
     firstname: "",
     lastname: "",
     email: "",
+    password: "",
     roles_id: "",
     roles_label: "",
     address_id: "",
@@ -23,6 +24,11 @@ function EditUser() {
   const roles = [
     { id: 1, label: "Admin" },
     { id: 2, label: "User" },
+  ];
+
+  const addressTypes = [
+    { id: 1, label: "Livraison" },
+    { id: 2, label: "Facturation" },
   ];
 
   useEffect(() => {
@@ -56,6 +62,7 @@ function EditUser() {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
+          password: userData.password,
           roles_id: userData.roles_id,
           roles_label: userData.roles_label,
           address_id: userData.address_id,
@@ -73,7 +80,7 @@ function EditUser() {
     console.log("FormData:", formData);
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/auth/edit${userId}`,
+        `http://localhost:9000/api/v1/auth/edit/${userId}`,
         {
           method: "PATCH",
           headers: {
@@ -83,6 +90,8 @@ function EditUser() {
           credentials: "include",
         }
       );
+
+      console.log(response);
 
       if (!response.ok) {
         console.log("Erreur lors de la mise a jours de l'utilisateur");
@@ -181,25 +190,29 @@ function EditUser() {
               </label>
             ))}
           </fieldset>
+          <h3>Modification de l&apos;adresse</h3>
+          {user.address_id ? (
+              <fieldset>
+                <legend>Type d&apos;adresse</legend>
+                {addressTypes.map(type => (
+                  <label key={type.id}>
+                    <input
+                      type="radio"
+                      name="address_type"
+                      value={type.id}
+                      checked={formData.address_type == type.id}
+                      onChange={handleChange}
+                    />
+                    {type.label}
+                  </label>
+                ))}
+              </fieldset>
+          ) : (
+            <p>Aucune adresse renseignée</p>
+          )}
+          <button type="submit">Modifier</button>
         </form>
-      </section>
-      <section>
-      <h3>Modification de l&apos;adresse</h3>
-      {user.address_id ? (
-        <form onSubmit={handleEditUser}>
-          <label>
-            Type
-            <input
-              type="text"
-              name="address_type"
-              value={formData.address_type}
-              onChange={handleChange}
-            />
-          </label>
-        </form>
-      ) : (
-        <p>Aucune adresse renseignée</p>
-      )}
+        <Link to={`/admin/users/${userId}`}>Retour au détail de l&apos;utilisateur</Link>
       </section>
     </main>
   );
