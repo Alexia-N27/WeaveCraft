@@ -23,7 +23,7 @@ router.post('/login', loginUsers);
 router.post('/logout', isConnected, logoutUsers);
 
 // Modification d'un utilisateur
-router.patch("/edit", isConnected, editUsers);
+router.patch("/edit/:id", isConnected, editUsers);
 // Suppression d'un utilisateur
 router.delete("/:id", adminRequired, deleteUsers);
 
