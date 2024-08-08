@@ -33,7 +33,7 @@ class Auth {
   static async getUserById(id) {
     try {
       const query = `
-      SELECT users.id, firstname, lastname, email, roles_id,
+      SELECT users.id, firstname, lastname, email, password, roles_id,
       roles.label AS roles_label,
       addresses.id AS address_id,
       address_type, street, complement, city, zip_code, country

@@ -147,9 +147,10 @@ const usersProfil = async (req, res) => {
 // Modification d'un utilisateur
 const editUsers = async (req, res) => {
   try {
+    const { id } = req.params;
     const { firstname, lastname, email, password, roles_id } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userData = [firstname, lastname, email, hashedPassword, roles_id, req.session.user.id ];
+    const userData = [firstname, lastname, email, hashedPassword, roles_id, id ];
 
     const response = await Auth.patchEditUser(userData);
 
