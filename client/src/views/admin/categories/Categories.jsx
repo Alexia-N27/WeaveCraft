@@ -20,12 +20,18 @@ function Categories() {
       const response = await fetch(
         "http://localhost:9000/api/v1/categories",
         {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           credentials: "include",
         }
       );
+
       if (!response) {
         return;
       }
+
       if(response.ok) {
         const data = await response.json();
         setCategories(data.response);
@@ -125,6 +131,7 @@ function Categories() {
           credentials: "include",
         }
       );
+
       if (response.ok) {
         setShouldRefreshCategories(prev => !prev);
       } else {

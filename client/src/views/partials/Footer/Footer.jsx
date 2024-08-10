@@ -15,7 +15,7 @@ function Footer() {
       </Link>
       <div className="footer-links">
         <Link to={"/"}>FAQ</Link>
-        <Link to={"/"}>Contact</Link>
+        <Link to={"/contact"}>Contact</Link>
         <Link to={"/"}>CGV</Link>
         <Link to={"/"}>Mentions légales</Link>
         <Link to={"/"}>Politique de confidentialité</Link>

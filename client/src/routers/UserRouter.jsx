@@ -7,6 +7,7 @@ import HomePage from "../views/user/HomePage";
 import Login from "../views/auth/Login";
 import Register from "../views/auth/Register";
 import UserProfile from "../views/user/UserProfile";
+import Contact from "../views/user/contact/Contact.jsx";
 import NotFound from "../views/NotFound";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <Footer />

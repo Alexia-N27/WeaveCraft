@@ -21,7 +21,6 @@ function AddProduct() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -31,8 +30,8 @@ function AddProduct() {
           headers: {
             "Content-Type" : "application/json",
           },
-          body: JSON.stringify(formData),
           credentials: "include",
+          body: JSON.stringify(formData),
         }
       );
 

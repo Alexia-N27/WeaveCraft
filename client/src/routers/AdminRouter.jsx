@@ -12,6 +12,7 @@ import Categories from "../views/admin/categories/Categories.jsx";
 import Products from "../views/admin/products/Products.jsx";
 import AddProduct from "../views/admin/products/AddProduct.jsx";
 import EditProduct from "../views/admin/products/EditProduct.jsx";
+import MessageContact from "../views/admin/messagerie/MessagesContact.jsx";
 import NotFound from "../views/NotFound";
 
 function Router() {
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/admin/products" element={<Products />} />
       <Route path="/admin/addproduct" element={<AddProduct />} />
       <Route path="/admin/editproduct/:id" element={<EditProduct />} />
+      <Route path="/admin/message" element={<MessageContact />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <Footer />
