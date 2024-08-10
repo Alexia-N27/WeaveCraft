@@ -82,7 +82,7 @@ function Header() {
 
           <br />
 
-          <Link to={"/"} onClick={closeMenu}>Contact</Link>
+          <Link to={"/contact"} onClick={closeMenu}>Contact</Link>
 
           {/* Utilisateur connecté, affichage btn déconnexion */}
           {session?.user.email && (

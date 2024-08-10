@@ -16,10 +16,12 @@ body {
   font-size: 1.6rem;
   color: $color-text;
   background-color: $color-bg-primary;
+  font-family: $font-family-title;
 }
 
 a {
   text-decoration: none;
+  display: inline-block;
   color: $color-text;
 }
 
