@@ -10,6 +10,7 @@
 
 html {
   font-size: 62.5%;
+  line-height: 1.5;
 }
 
 body {
@@ -19,13 +20,27 @@ body {
   font-family: $font-family-title;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+p {
+  font-size: 1.6rem;
+}
+
 a {
+  font-size: 1.6rem;
   text-decoration: none;
   display: inline-block;
   color: $color-text;
 }
 
 button {
+  font-size: 1.6rem;
   background: none;
   border: none;
   color: $color-text;
@@ -36,5 +51,67 @@ input {
 
   &::placeholder {
     color: $color-text;
+  }
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 1.8rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1.6rem;
+  }
+
+  a, button {
+    font-size: 1.6rem;
+  }
+}
+
+
+@media (min-width: 1024px) {
+  body {
+    font-size: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.4rem;
+  }
+
+  p {
+    font-size: 1.8rem;
+  }
+
+  a, button {
+    font-size: 1.8rem;
+  }
+
+  main {
+    padding: 40px;
   }
 }

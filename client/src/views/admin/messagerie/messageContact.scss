@@ -23,9 +23,9 @@
 
     th, td {
       padding: 12px 8px;
-      text-align: left;
+      text-align: center;
       border-bottom: 1px solid $table-border-color;
-      font-size: 0.9rem;
+      font-size: 1.4rem;
     }
 
     th {
@@ -43,7 +43,6 @@
 
     button {
       color: $delete-button-color;
-      font-size: 1rem;
       cursor: pointer;
       transition: color 0.3s;
     }
@@ -53,7 +52,7 @@
     }
   }
 
-  // Message Details Styles
+  // Message Details
   .message-details {
     width: 80%;
     background-color: white;
@@ -64,20 +63,13 @@
     margin-bottom: 20px;
 
     h2 {
-      font-size: 1.2rem;
       color: $color-secondary;
       margin-bottom: 10px;
-    }
-
-    p {
-      margin: 5px 0;
-      font-size: 1rem;
     }
   }
 
   a {
     margin-top: 20px;
-    font-size: 1rem;
     transition: color 0.3s;
     color: $color-secondary;
   }
@@ -85,52 +77,28 @@
   a:hover {
     color: darken($color-text, 10%);
   }
-}
 
+  // Media Queries pour ipad
+  @media (min-width: 768px) {
+    table {
 
-// Media Queries for larger screens
-@media (min-width: 768px) {
-  table {
-    font-size: 1rem;
+      th, td {
+        text-align: left;
+      }
+    }
   }
 
-  th, td {
-    padding: 15px;
-  }
+  // Media Queries pour ipad
+  @media (min-width: 1024px) {
+    table {
+      max-width: 800px;
 
-  button {
-    font-size: 1.2rem;
-  }
-
-  .message-details {
-    padding: 30px;
-  }
-
-  a {
-    font-size: 1.1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  main {
-    padding: 40px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  table {
-    max-width: 800px;
-    margin: 0 auto 20px auto;
-  }
-
-  .message-details {
-    max-width: 800px;
-    margin: 20px auto;
-  }
-
-  a {
-    font-size: 1.2rem;
+      th, td {
+        text-align: left;
+      }
+    }
+    .message-details {
+      max-width: 800px;
+    }
   }
 }

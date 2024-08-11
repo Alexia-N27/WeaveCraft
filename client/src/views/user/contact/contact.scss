@@ -1,27 +1,20 @@
 @import "../../../assets/styles/scss/variables";
 
-// Variables A MODIFIER
-$primary-color: #3498db;
-
-
 #form-contact {
-
   h1 {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
   }
 
-  // Form Styles
   .message-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-width: 100%;
-    margin: 0 auto;
+    max-width: 70%;
     background-color: $color-bg-secondary;
     padding: 20px;
-    margin: 20px;
+    margin: 20px auto;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
@@ -66,49 +59,20 @@ $primary-color: #3498db;
     }
 
   }
-}
 
-// Media Queries for ipad
-@media (min-width: 768px) {
-  .message-form {
-    max-width: 500px;
+  // Media Queries pour ipad
+  @media (min-width: 768px) {
+    .message-form {
+      max-width: 60%;
+      margin: 20px auto;
+    }
   }
 
-  .name-user-form {
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  input,
-  textarea {
-    font-size: 1.1rem;
-  }
-
-  button[type="submit"] {
-    font-size: 1.3rem;
-  }
-}
-
-// Media Queries for desktop
-@media (min-width: 1024px) {
-  main {
-    padding: 40px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  .message-form {
-    max-width: 600px;
-  }
-
-  input,
-  textarea {
-    font-size: 1.2rem;
-  }
-
-  button[type="submit"] {
-    font-size: 1.4rem;
+  // Media Queries pour desktop
+  @media (min-width: 1024px) {
+    .message-form {
+      max-width: 50%;
+      margin: 0 auto;
+    }
   }
 }

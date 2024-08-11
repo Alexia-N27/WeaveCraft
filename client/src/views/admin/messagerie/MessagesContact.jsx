@@ -4,12 +4,17 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEnvelope, faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
 
+import ValidateModal from "../../../components/modal/ValidateModal";
 import "./messageContact.scss";
 
 function MessageContact() {
   const [messages, setMessages] = useState(null);
   const [shouldRefreshMessages, setShouldRefreshMessages] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState(null);
 
   useEffect(() => {
     document.tittle = "Back Office | Messagerie";
@@ -26,25 +31,36 @@ function MessageContact() {
       );
 
       if (!response) {
-        console.log("Aucun messages trouvé");
+        setError("Aucun messages trouvés");
+        setSuccess(false);
         return;
       }
 
       if (response.ok) {
         const data = await response.json();
         setMessages(data.response);
+        setError(null);
+        setSuccess(false);
       }
     }
     fetchMessages();
   }, [shouldRefreshMessages]);
 
-  // Suppression de message
-  async function handleDelete(e, id) {
+  // Affichage de la modal de validation
+  function handleDeleteClick(e, message) {
     e.preventDefault();
     e.stopPropagation();
+    setMessageToDelete(message);
+    setShowModal(true);
+  }
+
+  // Confirmation de la suppression
+  async function handleValidateDelete() {
+    if (!messageToDelete) return;
+
     try{
       const response = await fetch(
-        `http://localhost:9000/api/v1/contacts/${id}`,
+        `http://localhost:9000/api/v1/contacts/${messageToDelete.id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -53,12 +69,24 @@ function MessageContact() {
 
       if (response.ok) {
         setShouldRefreshMessages(prev => !prev);
+        setSuccess(true);
       } else {
-        console.log("Erreur lors de la suppression du message");
+        setSuccess(false);
+        setError("Erreur lors de la suppression du message");
       }
     } catch (error) {
-      console.log("Erreur", error);
+      setError("Erreur système");
+      setSuccess(false);
+    } finally {
+      setShowModal(false);
+      setMessageToDelete(null);
     }
+  }
+
+  // Annuler la suppression
+  function handleCancelDelete() {
+    setShowModal(false);
+    setMessageToDelete(null);
   }
 
   // Marqué comme lu/nonlu
@@ -83,11 +111,11 @@ function MessageContact() {
         console.log("Erreur lors de la mise à jour du statut du message")
       }
     } catch (error) {
-      console.log("Erreur", error);
+      setError("Erreur système");
     }
   }
 
-  // Click d'un message
+  // Click sur une ligne d'un message
   function handleRowClick(message) {
     setSelectedMessage(message);
   }
@@ -111,7 +139,18 @@ function MessageContact() {
   return (
     <main id="message-contact">
       <h1>Gestion des messages</h1>
-      <section>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message de succès */}
+      { success && (
+        <div className="success-message">
+          Le message a été supprimé avec succès !
+        </div>
+      )}
+
+      <section className="message-table">
         <table>
           <thead>
             <tr>
@@ -142,7 +181,7 @@ function MessageContact() {
                     />
                   </td>
                   <td>
-                    <button onClick={(e) => handleDelete(e, message.id)}>
+                    <button onClick={(e) => handleDeleteClick(e, message)}>
                     <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
@@ -171,8 +210,16 @@ function MessageContact() {
 
         <Link to={"/admin/dashboard"}>Retour au tableau de bord</Link>
       </section>
+
+      {/* Modal de validation */}
+      <ValidateModal
+        show={showModal}
+        message="Êtes-vous sûr de vouloir supprimer ce message ?"
+        onConfirm={handleValidateDelete}
+        onCancel={handleCancelDelete}
+      />
     </main>
-  )
+  );
 }
 
 export default MessageContact;
