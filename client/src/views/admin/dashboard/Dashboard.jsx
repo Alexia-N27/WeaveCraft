@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 
+import "./dashboard.scss";
+
 function Dashboard() {
   return (
-    <main>
+    <main id="dashboard">
       <h1>Tableau de bord</h1>
-      <section>
+      <section className="list-link">
         <Link to={"/admin/roles"}>Gestion des rôles</Link>
         <Link to={"/admin/users"}>Gestion des utilisateurs</Link>
         <Link to={"/admin/products"}>Gestion des produits</Link>
