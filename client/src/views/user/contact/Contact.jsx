@@ -15,6 +15,8 @@ function Contact() {
     subject: "",
     content: ""
   });
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,12 +36,18 @@ function Contact() {
       );
 
       if (response.ok) {
-        navigate("/");
+        setSuccess(true);
+        setError(null);
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       } else {
-        console.log("Erreur lors de l'envoie du message");
+        setError("Erreur lors de l'envoi du message");
+        setSuccess(false);
       }
     } catch (error) {
-      console.log("Erreur", error);
+      setError("Une erreur est survenue lors de l'envoi du message");
+      setSuccess(false);
     }
   }
 
@@ -52,73 +60,84 @@ function Contact() {
   }
 
   return (
-    <main id="form-contact">
-      <h1>Contactez-nous</h1>
-      <form className="message-form" onSubmit={handleSubmit}>
-        <div className="name-user-form">
-          <label htmlFor="firstname">Prénom</label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstname"
-            placeholder="Votre prénom"
-            aria-label="Votre prénom"
-            value={formData.firstname}
-            onChange={handleChange}
-            required
-          />
+  <main id="form-contact">
+    <h1>Contactez-nous</h1>
 
-          <label htmlFor="lastname">Nom</label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            placeholder="Votre nom"
-            aria-label="Votre nom"
-            value={formData.lastname}
-            onChange={handleChange}
-            required
-          />
-        </div>
+    {/* Affichage de l'erreur */}
+    {error && <div className="error-message">{error}</div>}
 
-        <label htmlFor="email">Email</label>
+    {/* Affichage du message succès */}
+    {success && (
+      <div className="success-message">
+        Votre message a été envoyé avec succès!
+      </div>
+    )}
+
+    <form className="message-form" onSubmit={handleSubmit}>
+      <div className="name-user-form">
+        <label htmlFor="firstname">Prénom</label>
         <input
           type="text"
-          id="email"
-          name="email"
-          placeholder="Votre email"
-          aria-label="Votre email"
-          value={formData.email}
+          id="firstname"
+          name="firstname"
+          placeholder="Votre prénom"
+          aria-label="Votre prénom"
+          value={formData.firstname}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="subject">Sujet</label>
+        <label htmlFor="lastname">Nom</label>
         <input
           type="text"
-          id="subject"
-          name="subject"
-          placeholder="Votre sujet"
-          aria-label="Votre sujet"
-          value={formData.subject}
+          id="lastname"
+          name="lastname"
+          placeholder="Votre nom"
+          aria-label="Votre nom"
+          value={formData.lastname}
           onChange={handleChange}
           required
         />
+      </div>
 
-        <label htmlFor="content">Message</label>
-        <textarea
-          type="text"
-          id="content"
-          name="content"
-          placeholder="Votre message"
-          aria-label="Votre message"
-          value={formData.content}
-          onChange={handleChange}
-          required
-        />
+      <label htmlFor="email">Email</label>
+      <input
+        type="text"
+        id="email"
+        name="email"
+        placeholder="Votre email"
+        aria-label="Votre email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
 
-        <button type="Submit">Envoyer</button>
-      </form>
+      <label htmlFor="subject">Sujet</label>
+      <input
+        type="text"
+        id="subject"
+        name="subject"
+        placeholder="Votre sujet"
+        aria-label="Votre sujet"
+        value={formData.subject}
+        onChange={handleChange}
+        required
+      />
+
+      <label htmlFor="content">Message</label>
+      <textarea
+        type="text"
+        id="content"
+        name="content"
+        placeholder="Votre message"
+        aria-label="Votre message"
+        value={formData.content}
+        onChange={handleChange}
+        required
+      />
+
+      <button type="Submit">Envoyer</button>
+    </form>
     </main>
   );
 }
