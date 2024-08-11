@@ -1,31 +1,23 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-import useSession from "../../hooks/useSession";
+import useSession from "../../../hooks/useSession";
+import "./login.scss";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [formData, setFromData] = useState({
     email: "",
     password: "",
   });
-  const [MessageSuccess, setMessageSuccess] = useState("");
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
 
   const { session, setSession } = useSession();
 
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFromData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault(e);
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -43,29 +35,56 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         setSession(data);
-        setMessageSuccess("Connexion réussie !");
+        setSuccess(true);
         setError(null);
+
         if (data.user.roles_id == 1) {
           navigate("/admin/dashboard");
         } else {
-          navigate("/");
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         }
       } else {
         setError("Erreur lors de la connexion");
-        throw new Error("Erreur lors de la connexion");
       }
     } catch (error) {
-      console.log("Erreur de réseau", error);
-      setError(`Erreur de réseau: ${error.message}`);
+      setSuccess(false);
+      setError("Erreur de réseau");
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFromData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   return (
-    <main>
-      <h1>Bienvenue sur la page de connexion</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email
+    <main id="login-page">
+      <h1>Me connecter</h1>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message succès */}
+
+      {session?.user.firstname ? (
+        <div className="success-message">
+          Bienvenue, {session.user.firstname} !
+        </div>
+      ) : (
+        success && (
+          <div className="success-message">
+            Vous êtes bien connecté !
+          </div>
+        )
+      )}
+
+      <form className="login-form" onSubmit={handleSubmit}>
+        <label htmlFor="email">Email*</label>
           <input
             type="email"
             id="email"
@@ -76,9 +95,8 @@ function Login() {
             onChange={handleInputChange}
             required
           />
-        </label>
 
-        <label htmlFor="password">Mot de passe
+        <label htmlFor="password">Mot de passe*</label>
           <input
             type="password"
             id="password"
@@ -89,17 +107,13 @@ function Login() {
             onChange={handleInputChange}
             required
           />
-        </label>
 
-        <button type="submit">
-          Se connecter
-        </button>
+        <button type="submit">Je me connecte</button>
+        <Link className="link-register" to={"/register"}>Je crée mon compte</Link>
       </form>
-      {error && <p>{error}</p>}
-      {MessageSuccess && <p>{MessageSuccess}</p>}
-      {session?.user.firstname && <p>Bienvenue, {session?.user.firstname}!</p>}
+      <p>*Champ obligatoire</p>
     </main>
-  )
+  );
 }
 
 export default Login;
