@@ -20,7 +20,6 @@ function Contact() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -46,7 +45,7 @@ function Contact() {
         setSuccess(false);
       }
     } catch (error) {
-      setError("Une erreur est survenue lors de l'envoi du message");
+      setError("Erreur de réseau");
       setSuccess(false);
     }
   }

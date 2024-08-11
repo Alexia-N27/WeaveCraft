@@ -1,32 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useSession from "../../hooks/useSession";
+import useSession from "../../../hooks/useSession";
+
+import "./register.scss";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
   });
-  const [messageValidateRegister, setMessageValidateRegister] = useState("");
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
 
   const { setSession } = useSession();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -44,27 +38,47 @@ function Register() {
       if(response.ok) {
         const data = await response.json();
         setSession(data);
+        setSuccess(true);
         setError(null);
-        setMessageValidateRegister("Inscription et connexion réussie");
-        navigate("/");
-
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       } else {
-        throw new Error("Problème lors de la connexion");
+        setError("Erreur lors de l'inscription")
       }
     } catch (error) {
-      console.log("Erreur de réseau", error);
-      setError(`Erreur de réseau: ${error.message}`);
+      setSuccess(false);
+      setError("Erreur de réseau");
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
-    <main>
-      <h1>Bienvenue sur la page d&apos;inscription</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Prénom
+    <main id="register-page">
+      <h1>Crée ton compte</h1>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message succès */}
+      {success && (
+        <div className="success-message">
+          Vous êtes maintenant inscrit !
+        </div>
+      )}
+
+      <form className="register-form"onSubmit={handleSubmit}>
+        <label htmlFor="firstname">Prénom</label>
           <input
             type="text"
+            id="firstname"
             name="firstname"
             placeholder="Entrer votre prénom"
             aria-label="Entrer votre prénom"
@@ -72,12 +86,11 @@ function Register() {
             onChange={handleChange}
             required
           />
-        </label>
 
-        <label>
-          Nom
+        <label htmlFor="lastname">Nom</label>
           <input
             type="text"
+            id="lastname"
             name="lastname"
             placeholder="Entrer votre nom"
             aria-label="Entrer votre nom"
@@ -85,12 +98,11 @@ function Register() {
             onChange={handleChange}
             required
           />
-        </label>
 
-        <label>
-          Email
+        <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             name="email"
             placeholder="email@gmail.com"
             aria-label="Ajoutez un email"
@@ -98,12 +110,11 @@ function Register() {
             onChange={handleChange}
             required
           />
-        </label>
 
-        <label>
-          Mot de passe
+        <label htmlFor="password">Mot de passe</label>
           <input
             type="password"
+            id="password"
             name="password"
             placeholder="Entrer votre mot de passe"
             aria-label="Entrer votre mot de passe"
@@ -111,12 +122,9 @@ function Register() {
             onChange={handleChange}
             required
           />
-        </label>
 
-        <button type="submit">Valider</button>
+        <button type="submit">Je crée mon compte</button>
       </form>
-      {error && <p>{error}</p>}
-      {messageValidateRegister && <p>{messageValidateRegister}</p>}
     </main>
   );
 }

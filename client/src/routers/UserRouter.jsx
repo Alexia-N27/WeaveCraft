@@ -4,8 +4,8 @@ import Header from "../views/partials/Header/Header.jsx";
 import Footer from "../views/partials/Footer/Footer.jsx";
 
 import HomePage from "../views/user/HomePage";
-import Login from "../views/auth/Login";
-import Register from "../views/auth/Register";
+import Login from "../views/auth/login/Login.jsx";
+import Register from "../views/auth/register/Register.jsx";
 import UserProfile from "../views/user/UserProfile";
 import Contact from "../views/user/contact/Contact.jsx";
 import NotFound from "../views/NotFound";
