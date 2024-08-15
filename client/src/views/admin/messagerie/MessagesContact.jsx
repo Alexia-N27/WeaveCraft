@@ -8,6 +8,7 @@ import ValidateModal from "../../../components/modal/ValidateModal";
 import "./messageContact.scss";
 
 function MessageContact() {
+  document.tittle = "Back Office | Messagerie";
   const [messages, setMessages] = useState(null);
   const [shouldRefreshMessages, setShouldRefreshMessages] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -17,30 +18,34 @@ function MessageContact() {
   const [messageToDelete, setMessageToDelete] = useState(null);
 
   useEffect(() => {
-    document.tittle = "Back Office | Messagerie";
     async function fetchMessages() {
-      const response = await fetch(
-        "http://localhost:9000/api/v1/contacts",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type" : "application/json",
-          },
-          credentials: "include",
+      try {
+        const response = await fetch(
+          "http://localhost:9000/api/v1/contacts",
+          {
+            method: "GET",
+            headers: {
+              "Accept" : "application/json",
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!response) {
+          setError("Aucun messages trouvés");
+          setSuccess(false);
+          return;
         }
-      );
 
-      if (!response) {
-        setError("Aucun messages trouvés");
-        setSuccess(false);
-        return;
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data.response);
-        setError(null);
-        setSuccess(false);
+        if (response.ok) {
+          const data = await response.json();
+          setMessages(data.response);
+          setError(null);
+          setSuccess(false);
+        }
+      } catch (error) {
+        setError("Erreur de réseau");
+        setSuccess(null);
       }
     }
     fetchMessages();

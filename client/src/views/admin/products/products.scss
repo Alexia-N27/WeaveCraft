@@ -1,22 +1,132 @@
 @import "../../../assets/styles/scss/variables";
 
-.list-products {
-  width: 100%;
-  overflow-x: auto;
+#gestion-products {
+  .list-products {
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      background-color: white;
+      margin: 0 auto 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
+      thead {
+        background-color: $color-bg-secondary;
+      }
 
-    thead {
-      background-color: $color-bg-secondary;
+      th, td {
+        padding: 12px 8px;
+        text-align: center;
+        border-bottom: 1px solid $table-border-color;
+        font-size: 1.2rem;
+      }
+
+      th {
+        font-weight: bold;
+      }
+
+      tbody tr {
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      tr:hover {
+        background-color: lighten($color-bg-secondary, 10%);
+      }
+
+      .btn-edit {
+        color: $color-edit;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .btn-delete {
+        color: $delete-button-color;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .btn-delete:hover {
+        color: darken($delete-button-color, 10%);
+      }
     }
 
-    th, td {
-      padding: 8px;
-      text-align: center;
-      border: 1px solid $color-text;
+    .link-page-product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      .link-addproduct {
+        padding: 10px 20px;
+        background-color: $color-bg-secondary;
+        color: $color-bg-primary;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: darken($color-bg-secondary, 10%);
+        }
+      }
+
+      .link-back {
+        color: $color-secondary;
+        transition: color 0.3s;
+
+        &:hover {
+          color: darken($color-secondary, 10%);
+        }
+      }
+    }
+
+    // Product Details
+    .product-details {
+      width: 80%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin: auto;
+      margin-bottom: 20px;
+
+      h2 {
+        color: $color-secondary;
+        margin-bottom: 10px;
+      }
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 768px) {
+      table {
+
+        th, td {
+          text-align: left;
+        }
+
+        .btn-delete {
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 1024px) {
+      table {
+        max-width: 800px;
+
+        th, td {
+          text-align: left;
+        }
+
+        .btn-delete {
+          margin-left: 1rem;
+        }
+      }
+      .message-details {
+        max-width: 800px;
+      }
     }
   }
 }

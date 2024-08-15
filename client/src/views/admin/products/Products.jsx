@@ -5,12 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+import ValidateModal from "../../../components/modal/ValidateModal";
 import "./products.scss";
-// Ajout de pop up warning pour suppression.
+
 function Products() {
-  document.title = "Back office || Gestion des produits"
+  document.title = "Back office | Gestion des produits"
   const [products, setProducts] = useState(null);
   const [shouldRefreshProducts, setShouldRefreshProducts] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   const navigate = useNavigate();
 
@@ -28,45 +34,76 @@ function Products() {
           }
         );
 
-        if (!response) return;
+        if (!response) {
+          setError("Aucun produits trouvés");
+          setSuccess(false);
+          return;
+        }
 
         if (response.ok) {
           const data = await response.json();
           setProducts(data.response);
-          console.log(data.response);
+          setError(null);
+          setSuccess(false);
         }
       } catch (error) {
-        console.log("Erreur", error);
+        setError("Erreur de réseau");
+        setSuccess(null);
       }
     }
     fetchProducts();
   }, [shouldRefreshProducts]);
 
-  // Suppression d'un produit
-  async function handleDelete(e, id) {
+  // Affichage de la modal de validation
+  function handleDeleteClick(e, product) {
     e.preventDefault();
+    e.stopPropagation();
+    setProductToDelete(product);
+    setShowModal(true);
+  }
+
+  // Confirmation de la suppression
+  async function handleValidateDelete() {
+    if (!productToDelete) return;
+
+    console.log(productToDelete.id);
+
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/products/${id}`,
+        `http://localhost:9000/api/v1/products/${productToDelete.id}`,
         {
           method: "DELETE",
           credentials: "include",
         }
       );
 
-      console.log(response);
-
-      if (!response) {
-        console.log("Erreur lors de la suppression");
-        return;
-      }
-
-      if (response.ok) {
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(`Erreur lors de la suppression: ${errorData.message}`);
+        setSuccess(false);
+      } else {
         setShouldRefreshProducts(prev => !prev);
+        setSuccess(true);
+        setError(null);
       }
     } catch (error) {
-      console.log("Erreur:", error);
+      setError(`Erreur système: ${error.message}`);
+      setSuccess(false);
+    } finally {
+      setShowModal(false);
+      setProductToDelete(null);
     }
+  }
+
+  // Annuler la suppression
+  function handleCancelDelete() {
+    setShowModal(false);
+    setProductToDelete(null);
+  }
+
+  // Click sur ligne d'un produit
+  function handleRowClick(product) {
+    setSelectedProduct(product);
   }
 
   if(!products) {
@@ -86,18 +123,26 @@ function Products() {
   }
 
   return (
-    <main>
-      <h1>Bienvenue sur la page produits</h1>
+    <main id="gestion-products">
+      <h1>Liste des produits</h1>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message de succès */}
+      { success && (
+        <div className="success-message">
+          Le produit a été supprimé avec succès !
+        </div>
+      )}
+
       <section className="list-products">
-        <Link to="/admin/addproduct">Ajouter un nouveau produit</Link>
-        {/* Table products */}
         <table>
           <thead>
             <tr>
-              <th>id</th>
               <th>Titre</th>
               <th>Référence</th>
-              <th>Quantitée en stock</th>
+              <th>Quantitée</th>
               <th>Prix</th>
               <th>Categorie</th>
               <th>Action</th>
@@ -106,8 +151,7 @@ function Products() {
           <tbody>
             {products.map((product) => {
               return (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
+                <tr key={product.id} onClick={() => handleRowClick(product)}>
                   <td>{product.title}</td>
                   <td>{product.ref}</td>
                   <td>{product.quantityInStock}</td>
@@ -115,10 +159,10 @@ function Products() {
                   <td>{product.categories_name}</td>
                   {/* Actions */}
                   <td>
-                    <button onClick={() => navigate(`/admin/editproduct/${product.id}`, { state: { product } })}>
+                    <button className="btn-edit" onClick={() => navigate(`/admin/editproduct/${product.id}`, { state: { product } })}>
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
-                    <button onClick={(e) => handleDelete(e, product.id)}>
+                    <button className="btn-delete" onClick={(e) => handleDeleteClick(e, product)}>
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
@@ -127,8 +171,35 @@ function Products() {
             })}
           </tbody>
         </table>
-        <Link to={"/admin/dashboard"}>Retour au tableau de bord</Link>
+
+        {selectedProduct && (
+          <div className="product-details">
+            <h2>Détails du produit :</h2>
+            <p><strong>Titre :</strong> {selectedProduct.titlle}</p>
+            <p><strong>Sous-titre :</strong> {selectedProduct.undertitle}</p>
+            <p><strong>Description :</strong> {selectedProduct.description}</p>
+            <p><strong>Image :</strong> {selectedProduct.picture}</p>
+            <p><strong>Description image :</strong> {selectedProduct.alt}</p>
+            <p><strong>Prix :</strong> {selectedProduct.price}</p>
+            <p><strong>Reference :</strong> {selectedProduct.ref}</p>
+            <p><strong>Quantité en stock :</strong> {selectedProduct.quantityInStock}</p>
+            <p><strong>Catégorie :</strong> {selectedProduct.categories_name}</p>
+          </div>
+        )}
+
+        <div className="link-page-product">
+          <Link to={"/admin/dashboard"} className="link-back">Retour au tableau de bord</Link>
+          <Link to={"/admin/addproduct"} className="link-addproduct">Ajouter un produit</Link>
+        </div>
       </section>
+
+      {/* Modal de validation */}
+      <ValidateModal
+        show={showModal}
+        message="Êtes-vous sûr de vouloir supprimer ce produit ?"
+        onConfirm={handleValidateDelete}
+        onCancel={handleCancelDelete}
+      />
     </main>
   )
 }
