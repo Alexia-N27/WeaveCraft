@@ -175,7 +175,7 @@ function Products() {
         {selectedProduct && (
           <div className="product-details">
             <h2>Détails du produit :</h2>
-            <p><strong>Titre :</strong> {selectedProduct.titlle}</p>
+            <p><strong>Titre :</strong> {selectedProduct.title}</p>
             <p><strong>Sous-titre :</strong> {selectedProduct.undertitle}</p>
             <p><strong>Description :</strong> {selectedProduct.description}</p>
             <p><strong>Image :</strong> {selectedProduct.picture}</p>
