@@ -5,36 +5,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+import ValidateModal from "../../../components/modal/ValidateModal";
 import "./categories.scss";
 
 function Categories() {
+  document.title = "Back Office | Categories";
   const [categories, setCategories] = useState(null);
   const [newCategoryLabel, setNewCategoryLabel] = useState("");
   const [shouldRefreshCategories, setShouldRefreshCategories] = useState(false);
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [editingCategoryLabel, setEditingCategoryLabel] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   useEffect(() => {
-    document.title = "Back Office | Categories";
     async function fetchCategories() {
-      const response = await fetch(
-        "http://localhost:9000/api/v1/categories",
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: "include",
+      try {
+        const response = await fetch(
+          "http://localhost:9000/api/v1/categories",
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!response) {
+          setError("Aucune catégories trouvées");
+          setSuccess(false);
+          return;
         }
-      );
 
-      if (!response) {
-        return;
-      }
-
-      if(response.ok) {
-        const data = await response.json();
-        setCategories(data.response);
+        if(response.ok) {
+          const data = await response.json();
+          setCategories(data.response);
+          setError(null);
+          setSuccess(false);
+        }
+      } catch (error) {
+        setError("Erreur de réseau");
+        setSuccess(null);
       }
     }
     fetchCategories();
@@ -78,11 +92,15 @@ function Categories() {
       if (response.ok) {
         setNewCategoryLabel("");
         setShouldRefreshCategories(prev => !prev);
+        setError(null);
+        setSuccess(true);
       } else {
-        console.error("Erreur lors de l'ajout de la catégorie");
+        setError("Erreur lors de l'ajout de la catégorie");
+        setSuccess(false);
       }
     } catch (error) {
-      console.error("Erreur:", error);
+      setError("Erreur réseaux", error);
+      setSuccess(false);
     }
   }
 
@@ -106,12 +124,15 @@ function Categories() {
         setEditingCategoryId(null);
         setEditingCategoryLabel("");
         setShouldRefreshCategories(prev => !prev);
+        setError(null);
+        setSuccess(false);
       } else {
-        console.log("Erreur lors de la modification de la catégorie");
+        setError("Erreur lors de la modification de la catégorie");
+        setSuccess(false);
       }
-
     } catch (error) {
-      console.log("Erreur:", error);
+      setError("Erreur reseaux", error);
+      setSuccess(false);
     }
   }
 
@@ -120,12 +141,21 @@ function Categories() {
     setEditingCategoryLabel(category.label);
   }
 
+    // Affichage de la modal
+    function handleDeleteClick(e, category) {
+      e.preventDefault();
+      e.stopPropagation();
+      setCategoryToDelete(category);
+      setShowModal(true);
+    }
+
   // Suppression de catégorie
-  async function handleDelete(e, id) {
-    e.preventDefault();
+  async function handleValidateDelete() {
+    if (!categoryToDelete) return;
+
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/categories/${id}` ,
+        `http://localhost:9000/api/v1/categories/${categoryToDelete.id}` ,
         {
           method: "DELETE",
           credentials: "include",
@@ -134,12 +164,25 @@ function Categories() {
 
       if (response.ok) {
         setShouldRefreshCategories(prev => !prev);
+        setError(null);
+        setSuccess(true);
       } else {
-        console.log("Erreur lors de la suppression de la catégorie");
+        setError("Erreur lors de la suppression de la catégorie");
+        setSuccess(false);
       }
     } catch (error) {
-      console.log("Erreur:", error);
+      setError("Erreur reseaux", error)
+      setSuccess(false);
+    } finally {
+      setShowModal(false);
+      setCategoryToDelete(null);
     }
+  }
+
+  // Annuler la suppression
+  function handleCancelDelete() {
+    setShowModal(false);
+    setCategoryToDelete(null);
   }
 
   if (!categories) {
@@ -159,10 +202,20 @@ function Categories() {
   }
 
   return (
-    <main>
+    <main id="gestion-catégorie">
       <h1>Liste des categories</h1>
-      <section>
-        {/* Table categories */}
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message de succès */}
+      { success && (
+        <div className="success-message">
+          Le rôle à été ajouté avec succès !
+        </div>
+      )}
+
+      <section className="categorie-table">
         <table>
           <thead>
             <tr>
@@ -179,10 +232,10 @@ function Categories() {
                   <td>{category.label}</td>
                   {/* Actions */}
                   <td>
-                    <button onClick={() => handleEditClick(category)}>
+                    <button className="btn-edit" onClick={() => handleEditClick(category)}>
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
-                    <button onClick={(e) => handleDelete(e, category.id)}>
+                    <button className="btn-delete" onClick={(e) => handleDeleteClick(e, category)}>
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
@@ -192,33 +245,38 @@ function Categories() {
           </tbody>
         </table>
 
-        <h3>Ajouter une nouvelle categorie</h3>
-        <form onSubmit={handleAddCategory}>
-            <label>
-              Nom de la catégorie
+        <section className="add-edit-category">
+        <h2>Ajouter une nouvelle catégorie</h2>
+        <form className="form-category" onSubmit={handleAddCategory}>
+            <label htmlFor="categorie">Nom de la catégorie</label>
               <input
                 type="text"
+                id="categorie"
+                placeholder="Nom de catégorie"
+                aria-label="Nom de catégorie"
                 value={newCategoryLabel}
                 onChange={(e) => setNewCategoryLabel(e.target.value)}
                 required
               />
-            </label>
             <button type="submit">Ajouter</button>
         </form>
+        </section>
 
+        <section className="add-edit-category">
         {editingCategoryId && (
           <>
-            <h3>Modifier une catégorie</h3>
-            <form onSubmit={handleEditCategory}>
-              <label>
-                Nom de la catégorie
+            <h2>Modifier une catégorie</h2>
+            <form className="form-category" onSubmit={handleEditCategory}>
+              <label htmlFor="categorie-edit">Nom de la catégorie</label>
                 <input
                   type="text"
+                  id="categorie-edit"
+                  placeholder="Nom de categorie"
+                  aria-label="Nom de categorie"
                   value={editingCategoryLabel}
                   onChange={(e) => setEditingCategoryLabel(e.target.value)}
                   required
                 />
-              </label>
               <button type="submit">Modifier</button>
               <button type="button" onClick={() => setEditingCategoryId(null)}>
                 Annuler
@@ -226,8 +284,17 @@ function Categories() {
             </form>
           </>
         )}
+        </section>
         <Link to={"/admin/dashboard"}>Retour au tableau de bord</Link>
       </section>
+
+      {/* Modal de validation */}
+      <ValidateModal
+        show={showModal}
+        message="Êtes-vous sûr de vouloir supprimer cette catégorie ?"
+        onConfirm={handleValidateDelete}
+        onCancel={handleCancelDelete}
+      />
     </main>
   )
 }

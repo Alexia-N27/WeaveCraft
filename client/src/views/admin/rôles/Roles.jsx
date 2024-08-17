@@ -160,11 +160,11 @@ function Roles() {
     }
   }
 
-    // Annuler la suppression
-    function handleCancelDelete() {
-      setShowModal(false);
-      setRoleToDelete(null);
-    }
+  // Annuler la suppression
+  function handleCancelDelete() {
+    setShowModal(false);
+    setRoleToDelete(null);
+  }
 
   if (!roles) {
     return (
@@ -251,6 +251,8 @@ function Roles() {
                 <input
                   type="text"
                   id="role-edit"
+                  placeholder="Nom du rôle"
+                  aria-label="Nom du rôle"
                   value={editingRoleLabel}
                   onChange={(e) => setEditingRoleLabel(e.target.value)}
                   required
