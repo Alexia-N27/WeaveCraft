@@ -66,8 +66,6 @@ function Products() {
   async function handleValidateDelete() {
     if (!productToDelete) return;
 
-    console.log(productToDelete.id);
-
     try {
       const response = await fetch(
         `http://localhost:9000/api/v1/products/${productToDelete.id}`,
@@ -201,7 +199,7 @@ function Products() {
         onCancel={handleCancelDelete}
       />
     </main>
-  )
+  );
 }
 
 export default Products;

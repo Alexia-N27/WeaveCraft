@@ -136,7 +136,7 @@ function AddProduct() {
           />
 
         <label htmlFor="description">Description</label>
-          <input
+          <textarea
             type="text"
             id="description"
             name="description"
@@ -195,18 +195,6 @@ function AddProduct() {
             onChange={handleChange}
             required
           />
-
-        {/* <label htmlFor="category">Catégorie</label>
-          <input
-            type="text"
-            id="category"
-            name="categories_id"
-            placeholder="Catégorie"
-            aria-label="Sélectionner une catégorie"
-            value={formData["categories_id"]}
-            onChange={handleChange}
-            required
-          /> */}
 
           <label htmlFor="category">Catégorie</label>
           <select

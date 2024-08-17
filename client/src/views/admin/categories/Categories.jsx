@@ -202,7 +202,7 @@ function Categories() {
   }
 
   return (
-    <main id="gestion-catégorie">
+    <main id="gestion-categorie">
       <h1>Liste des categories</h1>
 
       {/* Affichage de l'erreur */}
