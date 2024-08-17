@@ -74,7 +74,7 @@ function Register() {
         </div>
       )}
 
-      <form className="register-form"onSubmit={handleSubmit}>
+      <form className="register-form" onSubmit={handleSubmit}>
         <label htmlFor="firstname">Prénom</label>
           <input
             type="text"
