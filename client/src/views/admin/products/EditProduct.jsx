@@ -1,34 +1,111 @@
-import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-// Remplacer useLocation par useParams
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 import "./editProduct.scss";
 
 function EditProduct() {
   document.title = "Back Office | Modification de produit"
 
+  const { id } =useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const product = location.state.product || {};
 
   const [formData, setFormData] = useState({
-    title: product.title || "",
-    undertitle: product.undertitle || "",
-    description: product.description || "",
-    picture: product.picture || "",
-    alt: product.alt || "",
-    price: product.price || 0,
-    ref: product.ref || "",
-    quantityInStock: product.quantityInStock || 0,
-    "categories_id": product.categories_id || 0,
+    title: "",
+    undertitle: "",
+    description: "",
+    picture: "",
+    alt: "",
+    price: 0,
+    ref: "",
+    quantityInStock: 0,
+    "categories_id": "",
   });
+
+  const [categories, setCategories] = useState([]);
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    // Fetch product by id
+    async function fetchProduct() {
+      try {
+        const response = await fetch(
+          `http://localhost:9000/api/v1/products/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Accept" : "application/json"
+            },
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          const productData = data.response[0];
+          setFormData({
+            title: productData.title || "",
+            undertitle: productData.undertitle || "",
+            description: productData.description || "",
+            picture: productData.picture || "",
+            alt: productData.alt || "",
+            price: productData.price || 0,
+            ref: productData.ref || "",
+            quantityInStock: productData.quantityInStock || 0,
+            categories_id: productData.categories_id || "",
+          });
+          setError(null);
+        } else {
+          setError("Erreur lors du chargement des données du produit");
+        }
+      } catch (error) {
+        setError("Erreur de réseau");
+      }
+    }
+
+    // fetch les catégories
+    async function fetchCategories() {
+      try {
+        const response = await fetch(
+          "http://localhost:9000/api/v1/categories",
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!response) {
+          setError("Aucune catégories trouvées");
+          setSuccess(false);
+          return;
+        }
+
+        if(response.ok) {
+          const data = await response.json();
+          setCategories(data.response);
+          setError(null);
+          setSuccess(false);
+          console.log(data.response);
+        }
+      } catch (error) {
+        setError("Erreur réseaux", error);
+        setSuccess(false);
+      }
+    }
+    fetchCategories();
+    fetchProduct();
+  }, [id]);
 
   async function handleEditProduct(e) {
     e.preventDefault();
-    console.log("Form Data:", formData);
+
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/products/${product.id}`,
+        `http://localhost:9000/api/v1/products/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -44,11 +121,15 @@ function EditProduct() {
 
       if (response.ok) {
         navigate("/admin/products")
+        setError(null);
+        setSuccess(true);
       } else {
-        console.log("Erreur lors de la modification du produit", responseData.msg);
+        setError("Erreur lors de la modification du produit", responseData.msg);
+        setSuccess(false);
       }
     } catch (error) {
-      console.log("Erreur:", error);
+      setError("Erreur réseaux", error);
+      setSuccess(false);
     }
   }
 
@@ -61,111 +142,120 @@ function EditProduct() {
   }
 
   return (
-    <main>
-      <h1>Bienvenue sur la modification de produit</h1>
-      <form className="edit-product" onSubmit={handleEditProduct}>
-        <label>
-          Titre
+    <main id="editproduct">
+      <h1>Modifier le produit</h1>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message succès */}
+      {success && (
+        <div className="success-message">
+          Le produit à été modifié avec succès !
+        </div>
+      )}
+
+      <form className="form-edit-product" onSubmit={handleEditProduct}>
+        <label htmlFor="title">Titre</label>
           <input
             type="text"
+            id="title"
             name="title"
             placeholder="Titre du produit"
             aria-label="Titre du produit"
             value={formData.title}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Sous-titre
+        <label htmlFor="undertitle">Sous-titre</label>
           <input
             type="text"
+            id="undertitle"
             name="undertitle"
             placeholder="Sous-titre du produit"
             aria-label="Sous-titre du produit"
             value={formData.undertitle}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Description
-          <input
+        <label htmlFor="description">Description</label>
+          <textarea
             type="text"
+            id="description"
             name="description"
             placeholder="Description du produit"
             aria-label="Description du produit"
             value={formData.description}
             onChange={handleChange}
           />
-        </label>
 
         {/* Type a modifier */}
-        <label>
-          Image
+        <label htmlFor="picture">Image</label>
           <input
             type="text"
+            id="picture"
             name="picture"
             placeholder="Ajouter une image"
             aria-label="Ajouter une image"
             value={formData.picture}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Alt
+        <label htmlFor="alt">Alt</label>
           <input
             type="text"
+            id="alt"
             name="alt"
             placeholder="Ajouter un alt"
             aria-label="Ajouter un alt"
             value={formData.alt}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Prix
+        <label htmlFor="price">Prix</label>
           <input
             type="number"
+            id="price"
             name="price"
             placeholder="Ajouter le prix"
             aria-label="Ajouter le prix"
             value={formData.price}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Quantité en stock
+        <label htmlFor="quantityInStock">Quantité en stock</label>
           <input
             type="number"
+            id="quantityInStock"
             name="quantityInStock"
             placeholder="Quantité en stock"
             aria-label="Quantité en stock"
             value={formData.quantityInStock}
             onChange={handleChange}
           />
-        </label>
 
-        <label>
-          Id de la catégorie
-          <input
-            type="text"
+        <label htmlFor="category">Catégorie</label>
+          <select
+            id="category"
             name="categories_id"
-            placeholder="Catégorie"
-            aria-label="Catégorie"
+            aria-label="Sélectionner une catégorie"
             value={formData["categories_id"]}
             onChange={handleChange}
-          />
-        </label>
+            required
+          >
+            <option value="">Sélectionner une catégorie</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.label}
+              </option>
+            ))}
+          </select>
 
         <button type="Submit">Modifier le produit</button>
       </form>
       <Link to="/admin/products">Retour à la page produit</Link>
     </main>
-  )
+  );
 }
 
 export default EditProduct;

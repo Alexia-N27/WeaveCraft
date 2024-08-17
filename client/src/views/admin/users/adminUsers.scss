@@ -1,2 +1,91 @@
-// Ajouter un hoover au survol de la ligne d'un utilisateur
-// qui montre qu'il est cliquable.
+@import "../../../assets/styles/scss/variables";
+
+#gestion-users {
+  .list-users {
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      background-color: white;
+      margin: 0 auto 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+
+      thead {
+        background-color: $color-bg-secondary;
+      }
+
+      th, td {
+        padding: 12px 8px;
+        text-align: center;
+        border-bottom: 1px solid $table-border-color;
+        font-size: 1.2rem;
+      }
+
+      th {
+        font-weight: bold;
+      }
+
+      tbody tr {
+        transition: background-color 0.3s;
+      }
+
+      tr:hover {
+        background-color: lighten($color-bg-secondary, 10%);
+      }
+
+      .btn-edit {
+        color: $color-edit;
+        padding-right: 1px;
+        transition: color 0.3s;
+      }
+
+      .btn-delete {
+        color: $delete-button-color;
+        transition: color 0.3s;
+      }
+
+      .btn-delete:hover {
+        color: darken($delete-button-color, 10%);
+      }
+    }
+
+    a {
+      margin-top: 20px;
+      transition: color 0.3s;
+      color: $color-secondary;
+    }
+
+    a:hover {
+      color: darken($color-text, 10%);
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 768px) {
+      table {
+        tbody tr {
+          cursor: pointer;
+        }
+
+        .btn-edit, .btn-delete {
+          cursor: pointer;
+          padding-right: 5px;
+        }
+      }
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 1024px) {
+      table {
+        max-width: 800px;
+        tbody tr {
+          cursor: pointer;
+        }
+
+        .btn-edit, .btn-delete {
+          cursor: pointer;
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+}
