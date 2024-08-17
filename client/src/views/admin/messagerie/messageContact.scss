@@ -27,7 +27,6 @@
     }
 
     tbody tr {
-      cursor: pointer;
       transition: background-color 0.3s;
     }
 
@@ -37,7 +36,6 @@
 
     button {
       color: $delete-button-color;
-      cursor: pointer;
       transition: color 0.3s;
     }
 
@@ -75,9 +73,16 @@
   // Media Queries pour ipad
   @media (min-width: 768px) {
     table {
-
       th, td {
         text-align: left;
+      }
+
+      tbody tr {
+        cursor: pointer;
+      }
+
+      button {
+        cursor: pointer;
       }
     }
   }
@@ -89,6 +94,14 @@
 
       th, td {
         text-align: left;
+      }
+
+      tbody tr {
+        cursor: pointer;
+      }
+
+      button {
+        cursor: pointer;
       }
     }
     .message-details {
