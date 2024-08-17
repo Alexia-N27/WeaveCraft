@@ -1,153 +1,155 @@
 @import "../../../assets/styles/scss/variables";
 
 #gestion-role {
-  table {
-    width: 80%;
-    border-collapse: collapse;
-    background-color: white;
-    margin: auto;
-    margin-bottom:20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-
-    thead {
-      background-color: $color-bg-secondary;
-    }
-
-    th, td {
-      padding: 12px 8px;
-      text-align: center;
-      border-bottom: 1px solid $table-border-color;
-      font-size: 1.4rem;
-    }
-
-    th {
-      font-weight: bold;
-    }
-
-    tbody tr {
-      transition: background-color 0.3s;
-    }
-
-    tr:hover {
-      background-color: lighten($color-bg-secondary, 10%);
-    }
-
-    .btn-edit{
-      color: $color-edit;
-      padding-right: 5px;
-      transition: color 0.3s;
-    }
-
-    .btn-edit:hover {
-      color: darken($color-edit, 10%);
-    }
-
-    .btn-delete{
-      color: $delete-button-color;
-      transition: color 0.3s;
-    }
-
-    .btn-delete:hover {
-      color: darken($delete-button-color, 10%);
-    }
-  }
-
-  .add-edit-role {
-    h2 {
-      color: $color-secondary;
-      margin-bottom: 10px;
-    }
-
-    .form-role {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      max-width: 80%;
-      background-color: $color-bg-secondary;
-      padding: 10px;
-      margin: 20px auto;
-      border-radius: 5px;
+  .role-table {
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      background-color: white;
+      margin: auto;
+      margin-bottom:20px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
 
-      label {
-        display: none;
+      thead {
+        background-color: $color-bg-secondary;
       }
 
-      input{
-        width: 100%;
-        padding: 5px;
-        background-color: $color-bg-primary;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1.3rem;
+      th, td {
+        padding: 12px 8px;
+        text-align: center;
+        border-bottom: 1px solid $table-border-color;
+        font-size: 1.4rem;
       }
 
-      button, button[type="submit"] {
-        padding: 5px;
-        background-color: $color-bg-primary;
-        color: $color-text;
-        border-radius: 5px;
+      th {
+        font-weight: bold;
+      }
+
+      tbody tr {
         transition: background-color 0.3s;
       }
 
-      button:hover {
-        background-color: darken($color-text, 10%);
-        color: $color-bg-primary;
+      tr:hover {
+        background-color: lighten($color-bg-secondary, 10%);
       }
 
-      button[type="submit"]:hover {
-        background-color: darken($color-text, 10%);
-        color: $color-bg-primary;
-      }
-    }
-  }
-
-  a {
-    margin-top: 20px;
-    transition: color 0.3s;
-    color: $color-secondary;
-  }
-
-  a:hover {
-    color: darken($color-text, 10%);
-  }
-
-  // Media Queries pour ipad
-  @media (min-width: 768px) {
-    table {
-      max-width: 50%;
-      tbody tr {
-        cursor: pointer;
+      .btn-edit{
+        color: $color-edit;
+        padding-right: 5px;
+        transition: color 0.3s;
       }
 
-      .btn-edit, .btn-delete {
-        cursor: pointer;
+      .btn-edit:hover {
+        color: darken($color-edit, 10%);
+      }
+
+      .btn-delete{
+        color: $delete-button-color;
+        transition: color 0.3s;
+      }
+
+      .btn-delete:hover {
+        color: darken($delete-button-color, 10%);
       }
     }
 
     .add-edit-role {
-      max-width: 50%;
-      margin: auto;
-    }
-  }
-
-  // Media Queries pour ipad
-  @media (min-width: 1024px) {
-    table {
-      max-width: 50%;
-      tbody tr {
-        cursor: pointer;
+      h2 {
+        color: $color-secondary;
+        margin-bottom: 10px;
       }
 
-      .btn-edit, .btn-delete {
-        cursor: pointer;
+      .form-role {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        max-width: 80%;
+        background-color: $color-bg-secondary;
+        padding: 10px;
+        margin: 20px auto;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        label {
+          display: none;
+        }
+
+        input{
+          width: 100%;
+          padding: 5px;
+          background-color: $color-bg-primary;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 1.3rem;
+        }
+
+        button, button[type="submit"] {
+          padding: 5px;
+          background-color: $color-bg-primary;
+          color: $color-text;
+          border-radius: 5px;
+          transition: background-color 0.3s;
+        }
+
+        button:hover {
+          background-color: darken($color-text, 10%);
+          color: $color-bg-primary;
+        }
+
+        button[type="submit"]:hover {
+          background-color: darken($color-text, 10%);
+          color: $color-bg-primary;
+        }
       }
     }
 
-    .add-edit-role {
-      max-width: 50%;
-      margin: auto;
+    a {
+      margin-top: 20px;
+      transition: color 0.3s;
+      color: $color-secondary;
+    }
+
+    a:hover {
+      color: darken($color-text, 10%);
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 768px) {
+      table {
+        max-width: 50%;
+        tbody tr {
+          cursor: pointer;
+        }
+
+        .btn-edit, .btn-delete {
+          cursor: pointer;
+        }
+      }
+
+      .add-edit-role {
+        max-width: 50%;
+        margin: auto;
+      }
+    }
+
+    // Media Queries pour ipad
+    @media (min-width: 1024px) {
+      table {
+        max-width: 50%;
+        tbody tr {
+          cursor: pointer;
+        }
+
+        .btn-edit, .btn-delete {
+          cursor: pointer;
+        }
+      }
+
+      .add-edit-role {
+        max-width: 50%;
+        margin: auto;
+      }
     }
   }
 }
