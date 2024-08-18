@@ -43,7 +43,7 @@ function Login() {
         } else {
           setTimeout(() => {
             navigate("/");
-          }, 1500);
+          }, 750);
         }
       } else {
         setError("Erreur lors de la connexion");
