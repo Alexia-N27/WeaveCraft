@@ -6,10 +6,10 @@ import "./editUser.scss";
 
 function EditUser() {
   document.title = "Back Office || Modification d'un utilisateur";
+
   const { userId } = useParams();
   const navigate = useNavigate();
-  const { session, isLoading } = useSession();
-  const [user, setUser] = useState(null);
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -20,6 +20,10 @@ function EditUser() {
     address_id: "",
     address_type: "",
   });
+
+  const { session, isLoading } = useSession();
+  const [user, setUser] = useState(null);
+  const [address, setAddress] = useState([]);
 
   const roles = [
     { id: 1, label: "Admin" },
@@ -75,30 +79,108 @@ function EditUser() {
     fetchUser();
   }, [session, userId]);
 
+  // Récupération des adresses associées à l'utilisateur
+  useEffect(() => {
+    async function fetchAddresses() {
+      try {
+        const response = await fetch(
+          `http://localhost:9000/api/v1/addresses/admin/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Accept" : "application/json",
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          console.log("Erreur lors de la récupérations des adresses");
+          return;
+        }
+
+        const data = await response.json();
+        console.log("Données brutes renvoyées par le backend :", data);
+        if (data.response && data.response.length > 0) {
+          setAddress(data.response);
+        } else {
+          console.log("Aucune adresse trouvée");
+        }
+      } catch (error) {
+        console.log("Erreur réseaux", error);
+      }
+    }
+    fetchAddresses();
+  }, [userId]);
+
   async function handleEditUser(e) {
     e.preventDefault();
     console.log("FormData:", formData);
+
     try {
-      const response = await fetch(
+      // requète patch pour la mise a jour utilisateur
+      const responseUser = await fetch(
         `http://localhost:9000/api/v1/auth/edit/${userId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type" : "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            email: formData.email,
+            password: formData.password,
+            roles_id: formData.roles_id,
+          }),
           credentials: "include",
         }
       );
 
-      console.log(response);
+      console.log("Response User:", responseUser);
 
-      if (!response.ok) {
+      if (!responseUser.ok) {
         console.log("Erreur lors de la mise a jours de l'utilisateur");
         return;
       }
 
       console.log("Utilisateur mis à jour");
+
+      // Requête patch pour la mise a jour de l'adresse
+      if (formData.address_id) {
+        console.log("Address Data:", {
+          address_type: formData.address_type,
+        });
+
+        const responseAddress = await fetch(
+          `http://localhost:9000/api/v1/addresses/${formData.address_id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type" : "application/json",
+            },
+            body: JSON.stringify({
+              address_type: formData.address_type,
+              street: formData.street || "",
+              complement: formData.complement || "",
+              city: formData.city || "",
+              zip_code: formData.zip_code || "",
+              country: formData.country || "",
+              users_id: userId,
+            }),
+            credentials: "include",
+          }
+        );
+
+        if (!responseAddress.ok) {
+          console.log("Erreur lors de la mise à jour de l'adresse");
+          return;
+        }
+
+        console.log("Adresse mise à jour");
+      }
+
+
       navigate(`/admin/users/${userId}`);
 
     } catch (error) {
@@ -181,9 +263,9 @@ function EditUser() {
               <label key={role.id}>
                 <input
                   type="radio"
-                  name="roles_label"
-                  value={role.label}
-                  checked={formData.roles_label === role.label}
+                  name="roles_id"
+                  value={role.id}
+                  checked={formData.roles_id == role.id}
                   onChange={handleChange}
                 />
                 {role.label}
@@ -194,7 +276,7 @@ function EditUser() {
           {user.address_id ? (
               <fieldset>
                 <legend>Type d&apos;adresse</legend>
-                {addressTypes.map(type => (
+                {addressTypes.map((type) => (
                   <label key={type.id}>
                     <input
                       type="radio"
