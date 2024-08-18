@@ -1,0 +1,62 @@
+@import "../../../assets/styles/scss/variables";
+
+#admin-details-user {
+  padding: 1rem;
+  color: #333;
+
+  .user-details {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    margin-bottom: 20px;
+
+    h2 {
+      color: $color-secondary;
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .user-details-profil,
+    .user-details-address {
+      margin-bottom: 1.5rem;
+    }
+
+    a {
+      margin-top: 20px;
+      transition: color 0.3s;
+      color: $color-secondary;
+    }
+
+    a:hover {
+      color: darken($color-text, 10%);
+    }
+  }
+
+  // Media Queries pour tablette (iPad)
+  @media (min-width: 768px) {
+    #admin-details-user {
+      .user-details {
+        padding: 2rem;
+      }
+    }
+  }
+
+  // Media Queries pour desktop
+  @media (min-width: 1024px) {
+    #admin-details-user {
+      .user-details {
+        width: 80%;
+        max-width: 1000px;
+      }
+    }
+  }
+}

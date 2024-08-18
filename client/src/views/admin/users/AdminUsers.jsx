@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import useSession from "../../../hooks/useSession";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+// import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import ValidateModal from "../../../components/modal/ValidateModal";
@@ -154,9 +154,9 @@ function AdminUsers() {
                   <td>{user.email}</td>
                   <td>{user.roles_label}</td>
                   <td>
-                    <button className="btn-edit" onClick={(e) => { e.stopPropagation(); navigate(`/admin/edituser/${user.id}`); }}>
+                    {/* <button className="btn-edit" onClick={(e) => { e.stopPropagation(); navigate(`/admin/edituser/${user.id}`); }}>
                       <FontAwesomeIcon icon={faPenToSquare} />
-                    </button>
+                    </button> */}
                     <button className="btn-delete" onClick={(e) => handleDeleteClick(e, user)}>
                       <FontAwesomeIcon icon={faTrash} />
                     </button>

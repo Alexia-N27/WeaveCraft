@@ -45,7 +45,7 @@ function MessageContact() {
         }
       } catch (error) {
         setError("Erreur de réseau");
-        setSuccess(null);
+        setSuccess(false);
       }
     }
     fetchMessages();

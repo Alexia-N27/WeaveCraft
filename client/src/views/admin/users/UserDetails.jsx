@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import useSession from "../../../hooks/useSession";
 
 import "./userDetails.scss";
@@ -7,9 +7,10 @@ import "./userDetails.scss";
 function UserDetails() {
   document.title = "Back office || Détails de l&apos;utilisateur";
   const { userId} = useParams();
-  const navigate = useNavigate();
   const { session, isLoading } = useSession();
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (!session) return;
@@ -30,15 +31,18 @@ function UserDetails() {
         console.log(response);
 
         if (!response.ok) {
-          console.log("Erreur lors de la récupération de l'utilisateur");
+          setError("Aucun utilisateur trouvé");
+          setSuccess(false);
           return;
         }
 
         const data = await response.json();
         setUser(data.response[0]);
-        console.log(data.response);
+        setError(null);
+        setSuccess(false);
       } catch (error) {
-        console.log("Erreur:", error);
+        setError("Erreur de réseau");
+        setSuccess(false);
       }
     }
     fetchUser();
@@ -69,32 +73,47 @@ function UserDetails() {
   }
 
   return (
-    <main>
-      <header>
-        <h1>Détail de l&apos;utilisateur</h1>
-      </header>
-      <section>
-        <p><strong>Prénom:</strong> {user.firstname}</p>
-        <p><strong>Nom:</strong> {user.lastname}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Rôle:</strong> {user.roles_label}</p>
-        {user.address_id ? (
-          <>
-            <h2>Adresse</h2>
-            <p><strong>Type:</strong> {user.address_type}</p>
-            <p><strong>Rue:</strong> {user.street}</p>
-            <p><strong>Complément:</strong> {user.complement}</p>
-            <p><strong>Code Postal:</strong> {user.zip_code}</p>
-            <p><strong>Ville:</strong> {user.city}</p>
-            <p><strong>Pays:</strong> {user.country}</p>
-          </>
-        ) : (
-          <>
-            <h2>Adresse</h2>
-            <p>Aucune adresse renseignée</p>
-          </>
-        )}
-        <button onClick={() => navigate(`/admin/edituser/${userId}`)}>Modifier</button>
+    <main id="admin-details-user">
+      <h1>Détail de l&apos;utilisateur</h1>
+
+      {/* Affichage de l'erreur */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Affichage du message de succès */}
+      { success && (
+        <div className="success-message">
+          Bienvenue sur le détails de l&apos;utilisateur !
+        </div>
+      )}
+
+      <section className="user-details">
+        <div  className="user-details-profil">
+          <h2>Profil</h2>
+          <p><strong>Prénom:</strong> {user.firstname}</p>
+          <p><strong>Nom:</strong> {user.lastname}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Rôle:</strong> {user.roles_label}</p>
+        </div>
+
+        <div className="user-details-address">
+          {user.address_id ? (
+            <>
+              <h2>Adresse</h2>
+              <p><strong>Type:</strong> {user.address_type}</p>
+              <p><strong>Rue:</strong> {user.street}</p>
+              <p><strong>Complément:</strong> {user.complement}</p>
+              <p><strong>Code Postal:</strong> {user.zip_code}</p>
+              <p><strong>Ville:</strong> {user.city}</p>
+              <p><strong>Pays:</strong> {user.country}</p>
+            </>
+          ) : (
+            <>
+              <h2>Adresse</h2>
+              <p>Aucune adresse renseignée</p>
+            </>
+          )}
+        </div>
+
         <Link to={"/admin/users"}>Retour aux utilisateurs</Link>
       </section>
     </main>
