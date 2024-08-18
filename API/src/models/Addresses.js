@@ -25,7 +25,7 @@ class Addresses {
     }
   }
 
-  static async getAddressesById(id) {
+  static async getAddressesById(userId) {
     try {
       const query = `
       SELECT addresses.id,
@@ -40,9 +40,9 @@ class Addresses {
       users.lastname
       FROM addresses
       JOIN users ON addresses.users_id = users.id
-      WHERE addresses.id = ?
+      WHERE addresses.users_id = ?
       `;
-      const response = await pool.execute(query, [id]);
+      const response = await pool.execute(query, [userId]);
       return response[0];
     } catch (error) {
       return { error: error.message };

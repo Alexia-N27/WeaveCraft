@@ -14,7 +14,7 @@ router.get("/admin/:id", adminRequired, AddressesById);
 router.post("/", addAddresses);
 
 // Modification d'une adresse
-router.patch("/:id", adminRequired, editAddresses);
+router.patch("/:id",  editAddresses);
 
 // Suppression d'une adresse
 router.delete("/:id", adminRequired, deleteAddresses);
