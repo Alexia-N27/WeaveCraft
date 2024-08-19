@@ -6,7 +6,7 @@ import Footer from "../views/partials/Footer/Footer.jsx";
 import HomePage from "../views/user/homepage/HomePage.jsx";
 import Login from "../views/auth/login/Login.jsx";
 import Register from "../views/auth/register/Register.jsx";
-import UserProfile from "../views/user/UserProfile";
+import UserProfile from "../views/user/detailsUser/UserProfile.jsx";
 import Contact from "../views/user/contact/Contact.jsx";
 import NotFound from "../views/NotFound";
 

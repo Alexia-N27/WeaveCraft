@@ -10,10 +10,10 @@ function App() {
     return <p>Chargement ...</p>;
   }
 
-  if (session) {
-    const isAdmin = session?.user.roles_id === 1 ;
-    return isAdmin ? <AdminRouter /> : <UserRouter />;
-  }
+
+  const isAdmin = session?.user.roles_id === 1 ;
+  return isAdmin ? <AdminRouter /> : <UserRouter />;
+
 }
 
 export default App;
