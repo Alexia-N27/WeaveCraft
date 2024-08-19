@@ -6,7 +6,7 @@ import "./userDetails.scss";
 
 function UserDetails() {
   document.title = "Back office || Détails de l&apos;utilisateur";
-  const { userId} = useParams();
+  const { userId } = useParams();
   const { session, isLoading } = useSession();
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
