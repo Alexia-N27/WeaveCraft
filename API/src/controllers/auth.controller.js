@@ -128,21 +128,38 @@ const usersById = async (req, res) => {
 };
 
 // Profil utilisateur
+// const usersProfil = async (req, res) => {
+//   try {
+//     const response = await Auth.getUserByEmailDetail(req.session.user.email);
+//     console.log(response);
+//     if (response[0][0].length === 0) {
+//       return res.status(404).json({ msg: "Utilisateur non trouvé" });
+//     }
+//     res
+//     .status(200)
+//     .json({ msg: "Utilisateur récupéré avec succès", response: response[0][0] });
+
+//   } catch (error) {
+//     res.status(500).json({ msg: "Erreur serveur", error: error.message });
+//   }
+// };
+// TEST
 const usersProfil = async (req, res) => {
   try {
     const response = await Auth.getUserByEmailDetail(req.session.user.email);
-    console.log(response);
-    if (response[0][0].length === 0) {
+
+    // Vérifie si l'utilisateur existe bien
+    if (!response || response.length === 0) {
       return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
-    res
-    .status(200)
-    .json({ msg: "Utilisateur récupéré avec succès", response: response[0][0] });
 
+    // Renvoie le profil utilisateur récupéré
+    res.status(200).json({ msg: "Utilisateur récupéré avec succès", response: response[0] });
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
+
 
 // Modification d'un utilisateur
 const editUsers = async (req, res) => {

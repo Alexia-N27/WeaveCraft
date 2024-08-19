@@ -61,15 +61,30 @@ class Auth {
     }
   }
 
+  // static async getUserByEmailDetail(email) {
+  //   try {
+  //     const query = `
+  //     SELECT users.firstname, users.lastname, users.email, users.password, users.roles_id, addresses.*
+  //     FROM users
+  //     LEFT JOIN addresses ON users.id = addresses.users_id
+  //     WHERE users.email = ?`;
+  //     const response = await pool.execute(query, [email]);
+  //     return response;
+  //   } catch (error) {
+  //     return { error: error.message };
+  //   }
+  // }
+  // TEST
   static async getUserByEmailDetail(email) {
     try {
       const query = `
-      SELECT users.firstname, users.lastname, users.email, users.password, users.roles_id, addresses.*
-      FROM users
-      LEFT JOIN addresses ON users.id = addresses.users_id
-      WHERE users.email = ?`;
+        SELECT users.firstname, users.lastname, users.email, users.password, users.roles_id, addresses.*
+        FROM users
+        LEFT JOIN addresses ON users.id = addresses.users_id
+        WHERE users.email = ?`;
+
       const response = await pool.execute(query, [email]);
-      return response;
+      return response[0];
     } catch (error) {
       return { error: error.message };
     }
