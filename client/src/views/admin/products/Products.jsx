@@ -9,7 +9,7 @@ import ValidateModal from "../../../components/modal/ValidateModal";
 import "./products.scss";
 
 function Products() {
-  document.title = "Back office | Gestion des produits"
+  document.title = "Back office | Gestion des produits";
   const [products, setProducts] = useState(null);
   const [shouldRefreshProducts, setShouldRefreshProducts] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
