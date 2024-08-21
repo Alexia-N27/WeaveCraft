@@ -5,6 +5,7 @@ import Footer from "../views/partials/Footer/Footer.jsx";
 
 import HomePage from "../views/user/homepage/HomePage.jsx";
 import ProductDetails from "../views/user/homepage/products/ProductDetails.jsx";
+import CategoryProducts from "../views/user/homepage/products/CategoryProducts.jsx";
 import Login from "../views/auth/login/Login.jsx";
 import Register from "../views/auth/register/Register.jsx";
 import UserProfile from "../views/user/detailsUser/UserProfile.jsx";
@@ -19,6 +20,7 @@ function Router() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/products/:id" element={<ProductDetails />} />
+      <Route path="/categories/:id" element={<CategoryProducts />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<UserProfile />} />
