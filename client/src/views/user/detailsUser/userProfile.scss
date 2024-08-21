@@ -1,1 +1,125 @@
 @import "../../../assets/styles/scss/variables";
+
+
+#profile-user {
+  padding: 1rem;
+  color: #333;
+
+  h1 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+
+  .details-user {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    gap: 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin: 0 auto;
+
+    .profile-address-edit {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+
+      h2 {
+        color: $color-secondary;
+      }
+
+      .btn-edit{
+        padding-right: 5px;
+        transition: color 0.3s;
+      }
+
+      .btn-edit:hover {
+        color: darken($color-edit, 10%);
+      }
+    }
+
+    p {
+      margin-bottom: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .details-user-profile,
+    .details-user-address {
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #eee;
+    }
+  }
+
+  a {
+    margin-top: 20px;
+    transition: color 0.3s;
+    color: $color-secondary;
+  }
+
+  a:hover {
+    color: darken($color-text, 10%);
+  }
+}
+
+@media (min-width: 768px) {
+  #profile-user {
+    padding: 2rem;
+
+    h1 {
+      font-size: 2.4rem;
+    }
+
+    .details-user {
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 800px;
+
+      .details-user-profile,
+      .details-user-address {
+        width: 48%;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 1028px) {
+  #profile-user {
+    padding: 3rem;
+
+    h1 {
+      font-size: 3rem;
+    }
+
+    .details-user {
+      max-width: 1024px;
+
+      .details-user-profile,
+      .details-user-address {
+        padding: 2rem;
+        border: 1px solid #ddd;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
