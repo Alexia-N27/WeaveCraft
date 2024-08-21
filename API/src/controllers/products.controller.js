@@ -30,6 +30,21 @@ const productsById = async (req, res) => {
   }
 };
 
+// Récupération des produit par categorie
+const productsByCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const response = await Products.getProductsByCategoryId(categoryId);
+
+    if (!response.length) {
+      return res.status(404).json({ msg: "Aucun produit trouvé pour cette catégorie" });
+    }
+    res.status(200).json({ msg: "Produits récupérés avec succès", response });
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
+  }
+};
+
 // Ajout d'un produit
 const addProducts = async (req, res) => {
   try {
@@ -120,4 +135,4 @@ const deleteProducts = async (req, res) => {
   }
 };
 
-export { allProducts, productsById, addProducts, editProducts, deleteProducts };
+export { allProducts, productsById, productsByCategory, addProducts, editProducts, deleteProducts };

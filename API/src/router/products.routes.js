@@ -1,7 +1,7 @@
 import { Router } from "express";
 import adminRequired from "../middlewares/adminRequired.js";
 import generateRef from "../middlewares/generateRef.js";
-import { allProducts, productsById, addProducts, editProducts, deleteProducts } from "../controllers/products.controller.js";
+import { allProducts, productsById, productsByCategory, addProducts, editProducts, deleteProducts } from "../controllers/products.controller.js";
 
 const router = Router();
 
@@ -10,6 +10,9 @@ router.get("/", allProducts);
 
 // Affichage d'un produit
 router.get("/:id", productsById);
+
+// Affichage des produits par categorie
+router.get("/category/:id", productsByCategory);
 
 // Ajout d'un produit
 router.post("/", adminRequired, generateRef, addProducts);
