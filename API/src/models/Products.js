@@ -32,6 +32,24 @@ class Products {
     }
   }
 
+  // Récupération des produit par categorie id
+  static async getProductsByCategoryId(categoryId) {
+    try {
+      const query = `
+        SELECT products.id, title, undertitle, description, picture, alt, price,
+        ref, quantityInStock, categories_id, categories.label AS categories_name
+        FROM products
+        JOIN categories ON products.categories_id = categories.id
+        WHERE categories_id = ?
+        ORDER BY products.id DESC
+      `;
+      const response = await pool.execute(query, [categoryId]);
+      return response[0];
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
   static async postAddProducts(data) {
     try {
       const query = `
