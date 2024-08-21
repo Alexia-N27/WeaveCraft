@@ -177,6 +177,8 @@ function AddProduct() {
             type="number"
             id="price"
             name="price"
+            step="0.01"
+            min="0"
             placeholder="Ajouter le prix"
             aria-label="Ajouter le prix"
             value={formData.price}
