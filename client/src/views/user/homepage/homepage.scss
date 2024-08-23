@@ -9,32 +9,33 @@
   }
 
   .categories {
-    margin-bottom: 2rem;
+    display: none;
+    // margin-bottom: 2rem;
 
-    .category-list {
-      display: flex;
-      overflow-x: auto; /* Activation du défilement horizontal */
-      gap: 1rem;
-      padding-bottom: 2rem;
+    // .category-list {
+    //   display: flex;
+    //   overflow-x: auto; /* Activation du défilement horizontal */
+    //   gap: 1rem;
+    //   padding-bottom: 2rem;
 
-      .category-item {
-        flex: 0 0 calc(33.333% - 1rem); /* Trois catégories par ligne */
-        min-width: 30%;
-        padding: 0.5rem 1rem;
-        margin-right: 1rem;
-        background-color: $color-bg-secondary;
-        border-radius: 8px;
-        text-decoration: none;
-        color: #333;
-        transition: background-color 0.3s ease;
-        white-space: nowrap;
-        text-align: center;
+    //   .category-item {
+    //     flex: 0 0 calc(33.333% - 1rem); /* Trois catégories par ligne */
+    //     min-width: 30%;
+    //     padding: 0.5rem 1rem;
+    //     margin-right: 1rem;
+    //     background-color: $color-bg-secondary;
+    //     border-radius: 8px;
+    //     text-decoration: none;
+    //     color: #333;
+    //     transition: background-color 0.3s ease;
+    //     white-space: nowrap;
+    //     text-align: center;
 
-        &:hover {
-          background-color: $color-secondary;
-        }
-      }
-    }
+    //     &:hover {
+    //       background-color: $color-secondary;
+    //     }
+    //   }
+    // }
   }
 
   .products {
@@ -99,6 +100,35 @@
 
   // Media Queries pour desktop
   @media (min-width: 1024px) {
+    .categories {
+      display: block;
+      margin-bottom: 2rem;
+      .category-list {
+        display: flex;
+        overflow-x: auto; /* Activation du défilement horizontal */
+        gap: 1rem;
+        padding-bottom: 2rem;
+
+        .category-item {
+          flex: 0 0 calc(33.333% - 1rem); /* Trois catégories par ligne */
+          min-width: 30%;
+          padding: 0.5rem 1rem;
+          margin-right: 1rem;
+          background-color: $color-bg-secondary;
+          border-radius: 8px;
+          text-decoration: none;
+          color: #333;
+          transition: background-color 0.3s ease;
+          white-space: nowrap;
+          text-align: center;
+
+          &:hover {
+            background-color: $color-secondary;
+          }
+        }
+      }
+    }
+
     .products .product-flex-container {
       max-width: 960px;
       gap: 2rem;

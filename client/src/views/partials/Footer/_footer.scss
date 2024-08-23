@@ -1,25 +1,38 @@
 @import "../../../assets/styles/scss/variables";
 
 footer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: $color-bg-secondary;
+  background-color: $color-bg-secondary;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
 
   .footer-logo {
-    width: 8rem;
+    max-width: 150px;
+    margin-bottom: 15px;
   }
 
   .footer-links {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    margin: 2rem 0 2rem 0;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
 
-    a {
-      margin: 0.8rem 0 0.8rem 0;
-    }
+  .footer-links a {
+    color: $color-text;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: darken($color-secondary, 10%);
+  }
+
+  span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $color-secondary;
   }
 }
