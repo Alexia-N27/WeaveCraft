@@ -1,5 +1,5 @@
-import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faCartShopping, faXmark, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,7 +11,35 @@ import "./_header.scss";
 function Header() {
   const { session, setSession } = useSession();
   const [showMenu, setShowMenu] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch("http://localhost:9000/api/v1/categories", {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          setError("Erreur lors de la récupération des catégories");
+          return;
+        }
+
+        const data = await response.json();
+        setCategories(data.response);
+      } catch (error) {
+        setError("Erreur réseau", error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   async function handleLogout() {
     try {
@@ -41,14 +69,25 @@ function Header() {
     setShowMenu(false);
   }
 
+  function handleUserClick() {
+    if (!session?.user.email) {
+      navigate("/login");
+    } else if (session.user.roles_id === 1) {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/profile");
+    }
+  }
+
   return (
     <header>
+      {error && <div className="error-message">{error}</div>}
       <nav>
         <button onClick={toggleMenu}>
           <FontAwesomeIcon icon={faBars} />
         </button>
 
-          <h1 className={"container-header-logo"}>
+          <h1 className="container-header-logo">
             <Link to={"/"}>
               <img
                 src={logo}
@@ -59,12 +98,8 @@ function Header() {
           </h1>
 
         <div className="nav-icons">
-          <NavLink to={session?.user.email ? "/profile" : "/login"}>
-            <FontAwesomeIcon icon={faUser} />
-          </NavLink>
-          <NavLink>
+            <FontAwesomeIcon icon={faUser} onClick={handleUserClick} />
             <FontAwesomeIcon icon={faCartShopping} />
-          </NavLink>
         </div>
       </nav>
 
@@ -75,16 +110,20 @@ function Header() {
 						<FontAwesomeIcon icon={faXmark} />
 					</button>
 
-          <Link to={"/"} onClick={closeMenu}>Colliers</Link>
-          <Link to={"/"} onClick={closeMenu}>Boucles</Link>
-          <Link to={"/"} onClick={closeMenu}>Bracelets</Link>
-          <Link to={"/"} onClick={closeMenu}>Manchette</Link>
+          {categories.map(category => (
+            <Link
+              key={category.id}
+              to={`/categories/${category.id}`}
+              onClick={closeMenu}
+            >
+              {category.label}
+            </Link>
+          ))}
 
           <br />
 
           <Link to={"/contact"} onClick={closeMenu}>Contact</Link>
 
-          {/* Utilisateur connecté, affichage btn déconnexion */}
           {session?.user.email && (
             <button onClick={() => { handleLogout(); closeMenu(); }}>
               Déconnexion
