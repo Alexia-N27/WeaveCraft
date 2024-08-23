@@ -60,6 +60,7 @@ function CategoryProducts() {
           </Link>
         ))}
       </div>
+      <Link to={"/"}>Retour à la boutique</Link>
     </main>
   );
 }

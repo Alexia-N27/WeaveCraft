@@ -75,4 +75,14 @@
       }
     }
   }
+
+  a {
+    margin-top: 20px;
+    transition: color 0.3s;
+    color: $color-secondary;
+  }
+
+  a:hover {
+    color: darken($color-text, 10%);
+  }
 }
