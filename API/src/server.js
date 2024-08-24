@@ -61,7 +61,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Middleware pour servir les fichiers statiques du dossier 'uploads'
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/API/upload', express.static(path.join(__dirname, '../upload')));
 
 app.use(router);
 
