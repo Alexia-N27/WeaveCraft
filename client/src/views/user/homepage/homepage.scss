@@ -1,23 +1,21 @@
 @import "../../../assets/styles/scss/variables";
 
 #homepage {
-  // padding: 2rem;
-
   .categories {
-    display: none; /* Par défaut, les catégories ne s'affichent pas */
+    display: none;
 
     @media (min-width: 1024px) {
       display: block;
       margin-bottom: 2rem;
       padding: 1rem 0;
-      background-color: $color-bg-primary; /* Fond de couleur pour démarquer la section des catégories */
+      background-color: $color-bg-primary;
 
       .category-list {
         display: flex;
-        justify-content: space-between; /* Répartit uniformément les catégories sur la largeur */
+        justify-content: space-between;
 
         .category-item {
-          flex: 1; /* Chaque catégorie prend un espace égal */
+          flex: 1;
           padding: 0.5rem 1rem;
           background-color: $color-bg-secondary;
           border-left: #333 solid 1px;
@@ -25,7 +23,7 @@
           color: #333;
           transition: background-color 0.3s ease;
           text-align: center;
-          white-space: nowrap; /* Empêche le texte de s'enrouler */
+          white-space: nowrap;
 
           &:hover {
             background-color: $color-secondary;

@@ -45,7 +45,11 @@ class Pictures {
       INSERT INTO additionalPictures (picture_src, alt, products_id)
       VALUES (?, ?, ?)
       `;
-      const response = await pool.execute(query, data);
+      const [response] = await pool.execute(query, [
+        data.picture_src,
+        data.alt,
+        data.products_id
+      ]);
       return response;
     } catch (error) {
       return { error: error.message };

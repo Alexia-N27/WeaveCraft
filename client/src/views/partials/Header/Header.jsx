@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faUser, faCartShopping, faXmark, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faUser, faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import useSession from "../../../hooks/useSession";
 
@@ -54,10 +54,10 @@ function Header() {
         setSession(null);
         navigate("/");
       } else {
-        console.log("Erreur lors de la déconnexion.")
+        setError("Erreur lors de la déconnexion.");
       }
     } catch (error) {
-      console.error("Erreur de connexion :", error);
+      setError("Erreur réseau", error);
     }
   }
 
@@ -110,8 +110,11 @@ function Header() {
 						<FontAwesomeIcon icon={faXmark} />
 					</button>
 
-          {categories.map(category => (
+          <section className="categories">
+            <div className="category-list">
+            {categories.map(category => (
             <Link
+              className="category-item nav-link"
               key={category.id}
               to={`/categories/${category.id}`}
               onClick={closeMenu}
@@ -119,31 +122,26 @@ function Header() {
               {category.label}
             </Link>
           ))}
+            </div>
+          </section>
 
           <br />
 
-          <Link to={"/contact"} onClick={closeMenu}>Contact</Link>
+          <Link
+            to={"/contact"}
+            onClick={closeMenu}
+            className="link-contact nav-link"
+          >
+            Contact
+          </Link>
 
           {session?.user.email && (
-            <button onClick={() => { handleLogout(); closeMenu(); }}>
+            <Link className="btn-deconnexion nav-link" onClick={() => { handleLogout(); closeMenu(); }}>
               Déconnexion
-            </button>
+            </Link>
           )}
         </nav>
       )}
-
-      <form className="search-form">
-        <div className="search-container">
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
-          <input
-            type="search"
-            name=""
-            id=""
-            placeholder="Rechercher un produit"
-            aria-label="Rechercher un produit"
-          />
-        </div>
-      </form>
     </header>
   );
 }
