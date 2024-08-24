@@ -53,6 +53,9 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+// Middleware pour servir les fichiers statiques du dossier 'uploads'
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(router);
 
 app.listen(process.env.LOCAL_PORT, () => {
