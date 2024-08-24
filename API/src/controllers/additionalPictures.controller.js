@@ -33,11 +33,23 @@ const picturesById = async (req, res) => {
 // Ajout d'une image
 const addPictures = async (req, res) => {
   try {
-    const { picture_src, alt, products_id } = req.body;
+    const { alt, products_id } = req.body;
+    const picture_src = req.file ? req.file.filename : null; // Récupère le nom du fichier téléchargé
 
-    const pictureData = [picture_src, alt, products_id];
+    if (!picture_src) {
+      return res.status(400).json({ msg: "Aucune image téléchargée" });
+    }
 
-    const response = await Pictures.postAddPictures(pictureData);
+    // const pictureData = [picture_src, alt, products_id];
+
+    const newPicture = {
+      picture_src: req.file ? req.file.filename : null,
+      alt: req.body.alt,
+      products_id: req.body.products_id
+    };
+
+    const response = await Pictures.postAddPictures(newPicture);
+    console.log(newPicture);
 
     if (response.error) {
       return res.status(500).json({
@@ -55,7 +67,8 @@ const addPictures = async (req, res) => {
 // Modification d'une image
 const editPictures = async (req, res) => {
   try {
-    const { picture_src, alt, products_id } = req.body;
+    const { alt, products_id } = req.body;
+    const picture_src = req.file ? req.file.filename : null;
 
     const pictureData = [picture_src, alt, products_id, req.params.id];
 

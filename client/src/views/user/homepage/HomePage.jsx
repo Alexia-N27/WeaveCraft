@@ -80,13 +80,11 @@ function HomePage() {
 
   return (
     <div id="homepage">
-      <h1>Bienvenue sur WeaveCraft</h1>
 
       {/* Affichage de l'erreur */}
       {error && <div className="error-message">{error}</div>}
 
       <section className="categories">
-        <h2>Catégories</h2>
         <div className="category-list">
           {categories.map((category) => (
             <Link to={`/categories/${category.id}`} key={category.id} className="category-item">
@@ -97,7 +95,6 @@ function HomePage() {
       </section>
 
       <section className="products">
-        <h2>Tout les bijoux</h2>
         <div className="product-flex-container">
           {products.map((product) => (
             <Link to={`/products/${product.id}`} key={product.id} className="product-card">
@@ -105,6 +102,9 @@ function HomePage() {
               <img src={noPicture} alt={product.alt} className="product-image" />
               <h3>{product.title}</h3>
               <p>{product.price}€</p>
+              <button className="add-to-cart-btn">
+                Ajouter au panier
+              </button>
             </Link>
           ))}
         </div>

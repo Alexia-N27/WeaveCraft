@@ -3,6 +3,9 @@ import { createRequire } from "module";
 import express from "express";
 import session from "express-session";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 import pool from "./config/db.js";
 import router from "./router/index.routes.js";
@@ -52,6 +55,13 @@ app.use(newSession);
 app.use(express.json());
 
 app.use(express.static("public"));
+
+// Définir __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Middleware pour servir les fichiers statiques du dossier 'uploads'
+app.use('/API/upload', express.static(path.join(__dirname, '../upload')));
 
 app.use(router);
 

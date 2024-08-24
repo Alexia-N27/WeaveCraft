@@ -1,41 +1,38 @@
 @import "../../../assets/styles/scss/variables";
 
 #homepage {
-  padding: 2rem;
-
-  h2 {
-    margin-bottom: 1rem;
-    color: $color-secondary;
-  }
+  // padding: 2rem;
 
   .categories {
-    display: none;
-    // margin-bottom: 2rem;
+    display: none; /* Par défaut, les catégories ne s'affichent pas */
 
-    // .category-list {
-    //   display: flex;
-    //   overflow-x: auto; /* Activation du défilement horizontal */
-    //   gap: 1rem;
-    //   padding-bottom: 2rem;
+    @media (min-width: 1024px) {
+      display: block;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+      background-color: $color-bg-primary; /* Fond de couleur pour démarquer la section des catégories */
 
-    //   .category-item {
-    //     flex: 0 0 calc(33.333% - 1rem); /* Trois catégories par ligne */
-    //     min-width: 30%;
-    //     padding: 0.5rem 1rem;
-    //     margin-right: 1rem;
-    //     background-color: $color-bg-secondary;
-    //     border-radius: 8px;
-    //     text-decoration: none;
-    //     color: #333;
-    //     transition: background-color 0.3s ease;
-    //     white-space: nowrap;
-    //     text-align: center;
+      .category-list {
+        display: flex;
+        justify-content: space-between; /* Répartit uniformément les catégories sur la largeur */
 
-    //     &:hover {
-    //       background-color: $color-secondary;
-    //     }
-    //   }
-    // }
+        .category-item {
+          flex: 1; /* Chaque catégorie prend un espace égal */
+          padding: 0.5rem 1rem;
+          background-color: $color-bg-secondary;
+          border-left: #333 solid 1px;
+          text-decoration: none;
+          color: #333;
+          transition: background-color 0.3s ease;
+          text-align: center;
+          white-space: nowrap; /* Empêche le texte de s'enrouler */
+
+          &:hover {
+            background-color: $color-secondary;
+          }
+        }
+      }
+    }
   }
 
   .products {
@@ -83,6 +80,26 @@
       p {
         color: #888;
       }
+
+      .add-to-cart-btn {
+        display: block;
+        width: 80%;
+        max-width: 200px;
+        margin: 10px auto;
+        padding: 10px;
+        background-color: $color-bg-secondary;
+        color: $color-bg-primary;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color:  $color-bg-secondary;
+        }
+      }
     }
   }
 
@@ -100,35 +117,6 @@
 
   // Media Queries pour desktop
   @media (min-width: 1024px) {
-    .categories {
-      display: block;
-      margin-bottom: 2rem;
-      .category-list {
-        display: flex;
-        overflow-x: auto; /* Activation du défilement horizontal */
-        gap: 1rem;
-        padding-bottom: 2rem;
-
-        .category-item {
-          flex: 0 0 calc(33.333% - 1rem); /* Trois catégories par ligne */
-          min-width: 30%;
-          padding: 0.5rem 1rem;
-          margin-right: 1rem;
-          background-color: $color-bg-secondary;
-          border-radius: 8px;
-          text-decoration: none;
-          color: #333;
-          transition: background-color 0.3s ease;
-          white-space: nowrap;
-          text-align: center;
-
-          &:hover {
-            background-color: $color-secondary;
-          }
-        }
-      }
-    }
-
     .products .product-flex-container {
       max-width: 960px;
       gap: 2rem;
