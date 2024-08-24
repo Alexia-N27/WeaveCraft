@@ -101,6 +101,7 @@ function Login() {
             type="password"
             id="password"
             name="password"
+            autoComplete="Current-password"
             placeholder="Entrer votre mot de passe"
             aria-label="Entrer votre mot de passe"
             value={formData.password}
