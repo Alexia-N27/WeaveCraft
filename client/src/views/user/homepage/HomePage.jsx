@@ -98,8 +98,11 @@ function HomePage() {
         <div className="product-flex-container">
           {products.map((product) => (
             <Link to={`/products/${product.id}`} key={product.id} className="product-card">
-              {/* <img src={product.picture} alt={product.alt} className="product-card" /> */}
-              <img src={noPicture} alt={product.alt} className="product-image" />
+              <img
+                src={`http://localhost:9000/API/upload/${product.picture}`}
+                alt={product.alt}
+                className="product-image"
+              />
               <h3>{product.title}</h3>
               <p>{product.price}€</p>
               <button className="add-to-cart-btn">

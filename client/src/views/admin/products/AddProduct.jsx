@@ -12,7 +12,7 @@ function AddProduct() {
     title: "",
     undertitle: "",
     description: "",
-    picture: "",
+    picture: null,
     alt: "",
     price: "",
     quantityInStock: "",
@@ -61,16 +61,22 @@ function AddProduct() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const fd = new FormData();
+    Object.keys(formData).forEach(key => {
+      if (key === "picture" && formData[key]) {
+        fd.append(key, formData[key]);
+      } else {
+        fd.append(key, formData[key]);
+      }
+    });
+
     try {
       const response = await fetch(
         "http://localhost:9000/api/v1/products/",
         {
           method: "POST",
-          headers: {
-            "Content-Type" : "application/json",
-          },
           credentials: "include",
-          body: JSON.stringify(formData),
+          body: fd,
         }
       );
 
@@ -79,20 +85,22 @@ function AddProduct() {
         setSuccess(true);
         setError(null);
       } else {
-        setError("Erreur lors de l'ajout du produit");
+        const errorData = await response.json();
+        setError(errorData.msg || "Erreur lors de l'ajout du produit");
         setSuccess(false);
       }
     } catch (error) {
+      console.error('Network Error:', error);
       setSuccess(false);
       setError("Erreur de réseau");
     }
   }
 
   function handleChange(e) {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: files ? files[0] : value,
     });
   }
 
@@ -147,15 +155,12 @@ function AddProduct() {
             required
           />
 
-        {/* Type a modifier */}
         <label htmlFor="picture">Image</label>
           <input
-            type="text"
+            type="file"
             id="picture"
             name="picture"
-            placeholder="Ajouter une image"
             aria-label="Ajouter une image"
-            value={formData.picture}
             onChange={handleChange}
             required
           />

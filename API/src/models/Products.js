@@ -13,6 +13,7 @@ class Products {
       const response = await pool.query(query);
       return response[0];
     } catch (error) {
+      return { error: error.message };
     }
   }
 
@@ -60,7 +61,8 @@ class Products {
       const response = await pool.execute(query, data);
       return response;
     } catch (error) {
-      return { error: error.message };
+      return console.log(error);
+
     }
   }
 
