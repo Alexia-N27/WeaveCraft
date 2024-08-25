@@ -15,7 +15,7 @@ html {
 
 body {
   height: 100vh;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: $color-text;
   background-color: $color-bg-primary;
   font-family: $font-family-title;
@@ -36,11 +36,11 @@ h2 {
 }
 
 p {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 }
 
 a {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   text-decoration: none;
   display: inline-block;
   color: $color-text;
@@ -51,7 +51,7 @@ a:hover {
 }
 
 button {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   background: none;
   border: none;
   color: $color-text;
@@ -92,11 +92,11 @@ input {
   }
 
   p {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   a, button {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 }
 

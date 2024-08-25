@@ -113,7 +113,7 @@ function MessageContact() {
       if (response.ok) {
         setShouldRefreshMessages(prev => !prev);
       } else {
-        console.log("Erreur lors de la mise à jour du statut du message")
+        setError("Erreur lors de la mise à jour du statut du message")
       }
     } catch (error) {
       setError("Erreur système");
@@ -143,7 +143,6 @@ function MessageContact() {
 
   return (
     <main id="message-contact">
-      <h1>Gestion des messages</h1>
 
       {/* Affichage de l'erreur */}
       {error && <div className="error-message">{error}</div>}

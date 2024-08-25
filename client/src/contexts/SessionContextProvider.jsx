@@ -34,7 +34,6 @@ const SessionProvider = ({children}) => {
         }
 
         const data = await response.json();
-        console.log(data);
         setSession(data);
 
       } catch (error) {

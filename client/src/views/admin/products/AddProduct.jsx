@@ -48,7 +48,6 @@ function AddProduct() {
           setCategories(data.response);
           setError(null);
           setSuccess(false);
-          console.log(data.response);
         }
       } catch (error) {
         setError("Erreur réseaux", error);
@@ -90,7 +89,6 @@ function AddProduct() {
         setSuccess(false);
       }
     } catch (error) {
-      console.error('Network Error:', error);
       setSuccess(false);
       setError("Erreur de réseau");
     }

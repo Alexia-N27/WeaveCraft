@@ -28,8 +28,6 @@ function UserDetails() {
           }
         );
 
-        console.log(response);
-
         if (!response.ok) {
           setError("Aucun utilisateur trouvé");
           setSuccess(false);
@@ -74,7 +72,6 @@ function UserDetails() {
 
   return (
     <main id="admin-details-user">
-      <h1>Détail de l&apos;utilisateur</h1>
 
       {/* Affichage de l'erreur */}
       {error && <div className="error-message">{error}</div>}
