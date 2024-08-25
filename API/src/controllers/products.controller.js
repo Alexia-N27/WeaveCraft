@@ -52,7 +52,6 @@ const addProducts = async (req, res) => {
       title,
       undertitle,
       description,
-      picture,
       alt,
       price,
       ref,
@@ -60,9 +59,22 @@ const addProducts = async (req, res) => {
       categories_id
     } = req.body;
 
+    const picture = req.file ? req.file.filename : null;
+
+    if (!picture) {
+      return res.status(400).json({ msg: "Aucune image téléchargée" });
+    }
+
     const productData = [
-      title, undertitle, description, picture, alt, price,
-      ref, quantityInStock, categories_id
+      title,
+      undertitle,
+      description,
+      picture,
+      alt,
+      price,
+      ref,
+      quantityInStock,
+      categories_id
     ];
 
     const response = await Products.postAddProducts(productData);
@@ -87,13 +99,14 @@ const editProducts = async (req, res) => {
       title,
       undertitle,
       description,
-      picture,
       alt,
       price,
       ref,
       quantityInStock,
       categories_id
     } = req.body;
+
+    const picture = req.file ? req.file.path : null;
 
     const productData = [
       title, undertitle, description, picture, alt, price,
