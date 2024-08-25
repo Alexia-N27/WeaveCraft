@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import "./categoryProducts.scss";
-import noPicture from "../../../../assets/images/no-picture.jpg";
 
 function CategoryProducts() {
   const { id } = useParams();
@@ -45,13 +44,16 @@ function CategoryProducts() {
   return (
     <main id="category-products">
       <h1>{categoryLabel}</h1>
-
       {error && <div className="error-message">{error}</div>}
 
       <div className="product-flex-container">
         {products.map((product) => (
           <Link to={`/products/${product.id}`} key={product.id} className="product-card">
-            <img src={noPicture} alt={product.alt} className="product-image" />
+            <img
+                src={`http://localhost:9000/API/upload/${product.picture}`}
+                alt={product.alt}
+                className="product-image"
+            />
             <h3>{product.title}</h3>
             <p>{product.price}€</p>
             <button className="add-to-cart-btn">

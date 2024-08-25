@@ -88,6 +88,16 @@
       margin: auto;
       margin-bottom: 20px;
 
+      .product-image {
+        display: block;
+        width: 80%;
+        max-width: 600px;
+        margin: 30px auto 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+      }
+
       h2 {
         color: $color-secondary;
         margin-bottom: 10px;

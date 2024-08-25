@@ -176,10 +176,14 @@ function Products() {
             <h2>Détails du produit :</h2>
             <p><strong>Titre :</strong> {selectedProduct.title}</p>
             <p><strong>Sous-titre :</strong> {selectedProduct.undertitle}</p>
+            <img
+                src={`http://localhost:9000/API/upload/${selectedProduct.picture}`}
+                alt={selectedProduct.alt}
+                className="product-image"
+            />
             <p><strong>Description :</strong> {selectedProduct.description}</p>
-            <p><strong>Image :</strong> {selectedProduct.picture}</p>
             <p><strong>Description image :</strong> {selectedProduct.alt}</p>
-            <p><strong>Prix :</strong> {selectedProduct.price}</p>
+            <p><strong>Prix :</strong> {selectedProduct.price}€</p>
             <p><strong>Reference :</strong> {selectedProduct.ref}</p>
             <p><strong>Quantité en stock :</strong> {selectedProduct.quantityInStock}</p>
             <p><strong>Catégorie :</strong> {selectedProduct.categories_name}</p>

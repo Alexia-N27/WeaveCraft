@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import "./productDetails.scss";
-// img temporaire
-import noPicture from "../../../../assets/images/no-picture.jpg";
 
 function ProductDetails() {
   document.title = "Produit";
@@ -49,8 +47,11 @@ function ProductDetails() {
     <main id="product-details">
       <h2>{productById.title}</h2>
       <h3>{productById.undertitle}</h3>
-      {/* <img src={productById.picture} alt={productById.alt} className="product-card" /> */}
-      <img src={noPicture} alt={productById.alt} className="product-image" />
+      <img
+        src={`http://localhost:9000/API/upload/${productById.picture}`}
+        alt={productById.alt}
+        className="product-image"
+      />
       <p>{productById.description}</p>
       <p>{productById.price}€</p>
       <p>Quantitée disponible: {productById.quantityInStock}</p>

@@ -5,7 +5,6 @@ import "./dashboard.scss";
 function Dashboard() {
   return (
     <main id="dashboard">
-      <h1>Tableau de bord</h1>
       <section className="list-link">
         <Link to={"/admin/roles"}>Gestion des rôles</Link>
         <Link to={"/admin/users"}>Gestion des utilisateurs</Link>
