@@ -106,7 +106,6 @@ function AddProduct() {
 
   return (
     <main id="addproduct">
-      <h1>Ajouter un nouveau produit</h1>
 
       {/* Affichage de l'erreur */}
       {error && <div className="error-message">{error}</div>}

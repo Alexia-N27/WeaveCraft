@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./homepage.scss";
-// img temporaire
-import noPicture from "../../../assets/images/no-picture.jpg";
 
 function HomePage() {
   document.title = "WeaveCraft";
@@ -12,7 +10,6 @@ function HomePage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // fetch products
     async function fetchProducts() {
       try {
         const response = await fetch(
@@ -34,7 +31,6 @@ function HomePage() {
         if (response.ok) {
           const data = await response.json();
           setProducts(data.response);
-          console.log("Products", data.response);
           setError(null);
         }
       } catch (error) {
@@ -42,7 +38,6 @@ function HomePage() {
       }
     }
 
-    // fetch catégories
     async function fetchCategories() {
       try {
         const response = await fetch(
@@ -64,7 +59,6 @@ function HomePage() {
         if(response.ok) {
           const data = await response.json();
           setCategories(data.response);
-          console.log("Categories", data.response);
           setError(null);
         }
       } catch (error) {
