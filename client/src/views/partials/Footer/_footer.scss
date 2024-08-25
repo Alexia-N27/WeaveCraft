@@ -22,7 +22,7 @@ footer {
   .footer-links a {
     color: $color-text;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     transition: color 0.3s ease;
   }
 
@@ -33,6 +33,6 @@ footer {
   span {
     font-size: 1.2rem;
     font-weight: 600;
-    color: $color-secondary;
+    color: $color-text;
   }
 }

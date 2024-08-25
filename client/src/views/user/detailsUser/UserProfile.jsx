@@ -29,8 +29,6 @@ function UserProfile() {
           }
         );
 
-        console.log(response);
-
         if (!response.ok) {
           setError("Aucun utilisateur trouvé");
           return;
@@ -38,7 +36,6 @@ function UserProfile() {
 
         const data = await response.json();
         setUser(data.response);
-        console.log("RESPONSE: ", data.response);
         setError(null);
       } catch (error) {
         setError("Erreur de réseau");

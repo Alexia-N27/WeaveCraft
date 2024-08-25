@@ -192,12 +192,10 @@ function EditProduct() {
         {/* Type a modifier */}
         <label htmlFor="picture">Image</label>
           <input
-            type="text"
+            type="file"
             id="picture"
             name="picture"
-            placeholder="Ajouter une image"
             aria-label="Ajouter une image"
-            value={formData.picture}
             onChange={handleChange}
           />
 

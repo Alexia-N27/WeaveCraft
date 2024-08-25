@@ -65,8 +65,6 @@ function Products() {
   // Confirmation de la suppression
   async function handleValidateDelete() {
     if (!productToDelete) return;
-
-    console.log(productToDelete.id);
     try {
       const response = await fetch(
         `http://localhost:9000/api/v1/products/${productToDelete.id}`,
@@ -123,7 +121,6 @@ function Products() {
 
   return (
     <main id="gestion-products">
-      <h1>Liste des produits</h1>
 
       {/* Affichage de l'erreur */}
       {error && <div className="error-message">{error}</div>}
@@ -142,7 +139,6 @@ function Products() {
               <th>Titre</th>
               <th>Référence</th>
               <th>Quantitée</th>
-              <th>Prix</th>
               <th>Categorie</th>
               <th>Action</th>
             </tr>
@@ -154,7 +150,6 @@ function Products() {
                   <td>{product.title}</td>
                   <td>{product.ref}</td>
                   <td>{product.quantityInStock}</td>
-                  <td>{product.price}</td>
                   <td>{product.categories_name}</td>
                   {/* Actions */}
                   <td>
