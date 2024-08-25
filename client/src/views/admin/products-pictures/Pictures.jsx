@@ -52,7 +52,7 @@ function Pictures() {
     }
 
     const formData = new FormData();
-    formData.append('picture_src', addPictureSrc); // Assure-toi que 'picture_src' est le nom du champ pour multer
+    formData.append('picture_src', addPictureSrc);
     formData.append('alt', addPictureAlt);
     formData.append('products_id', selectedProductId);
 

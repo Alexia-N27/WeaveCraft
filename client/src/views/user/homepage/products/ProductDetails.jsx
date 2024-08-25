@@ -47,7 +47,6 @@ function ProductDetails() {
 
   return (
     <main id="product-details">
-      <h1>Détails du produit</h1>
       <h2>{productById.title}</h2>
       <h3>{productById.undertitle}</h3>
       {/* <img src={productById.picture} alt={productById.alt} className="product-card" /> */}
